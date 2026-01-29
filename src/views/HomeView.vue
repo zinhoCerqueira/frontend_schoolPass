@@ -15,7 +15,6 @@
           rounded
           prepend-icon="mdi-login-variant"
           class="btn-gradient"
-          elevation
         >
           Entrar
         </v-btn>
@@ -33,17 +32,39 @@
   </v-app-bar>
 
   <v-main>
-  <v-container>
-    <p
-      class="app-main-title"
-      :class="{ typing: isTyping }"
-    >
-      {{ displayedText }}
-    </p>
-  </v-container>
-</v-main>
+    <v-container>
+      <p class="app-main-title" :class="{ typing: isTyping }">
+        {{ displayedText }}
+      </p>
 
+      <v-row justify="center">
+        <v-col
+          v-for="(feature, index) in features"
+          :key="index"
+          cols="12"
+          md="6"
+          class="feature-col"
+        >
+          <v-card elevation="2" rounded="lg" class="feature-card">
+            <v-card-text class="d-flex align-start">
+              <v-icon size="32" color="primary" class="me-3">
+                {{ feature.icon }}
+              </v-icon>
 
+              <div>
+                <div class="feature-title">
+                  {{ feature.title }}
+                </div>
+                <div class="feature-text">
+                  {{ feature.text }}
+                </div>
+              </div>
+            </v-card-text>
+          </v-card>
+        </v-col>
+      </v-row>
+    </v-container>
+  </v-main>
 </template>
 
 <script setup>
@@ -58,6 +79,7 @@ const fullText = "Chegar e sair ficou mais fácil.";
 const displayedText = ref("");
 const isTyping = ref(true);
 const typingSpeed = 30;
+const endDelay = 400;
 
 const features = [
   {
@@ -92,6 +114,21 @@ const features = [
   },
 ];
 
+const visibleCards = ref(Array(features.length).fill(false));
+
+const showCardsSequentially = () => {
+  features.forEach((_, index) => {
+    setTimeout(() => {
+      visibleCards.value[index] = true;
+    }, index * 150);
+  });
+};
+
+setTimeout(() => {
+  isTyping.value = false;
+  showCardsSequentially();
+}, endDelay);
+
 onMounted(() => {
   let index = 0;
   const typingInterval = setInterval(() => {
@@ -101,12 +138,9 @@ onMounted(() => {
     } else {
       clearInterval(typingInterval);
       isTyping.value = false;
-
     }
   }, typingSpeed);
 });
-
-
 </script>
 
 <style scoped>
@@ -154,5 +188,4 @@ onMounted(() => {
     border-color: transparent;
   }
 }
-
 </style>
