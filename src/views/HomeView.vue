@@ -2,10 +2,9 @@
   // Barra de navegação
   <v-app-bar :elevation="1">
     <v-app-bar-title class="app-title">WayToSchool</v-app-bar-title>
+
     <template v-slot:image>
-      <v-img
-        gradient="to top left, rgba(19,84,122,.8), rgba(128,208,199,.8)"
-      ></v-img>
+      <v-img gradient="135deg, #2f78a8, #000508" />
     </template>
 
     <template v-slot:append>
@@ -14,7 +13,7 @@
           variant="flat"
           rounded
           prepend-icon="mdi-login-variant"
-          class="btn-gradient"
+          color="white"
         >
           Entrar
         </v-btn>
@@ -23,7 +22,7 @@
           variant="flat"
           rounded
           prepend-icon="mdi-account-plus-outline"
-          class="btn-gradient"
+          color="white"
         >
           Cadastre-se
         </v-btn>
@@ -31,7 +30,7 @@
     </template>
   </v-app-bar>
 
-  <v-main>
+  <v-main class="d-flex align-center">
     <v-container>
       <p class="app-main-title mb-8" :class="{ typing: isTyping }">
         {{ displayedText }}
@@ -69,60 +68,58 @@
           </v-card>
         </v-col>
       </v-row>
+      <v-row class="mt-4">
+        <v-col cols="12">
+          <v-card
+            class="rounded-xl pa-8 text-center"
+            color="#405877"
+          >
+            <div class="text-h4 font-weight-bold mb-4">
+              Mais controle. Menos preocupação.
+            </div>
+
+            <div class="text-body-1 mb-6">
+              Pais avisam, a escola se organiza e o aluno sai no momento certo.
+              Tudo em tempo real, sem filas e sem confusão.
+            </div>
+
+            <v-btn
+              size="large"
+              rounded
+              color="white"
+              prepend-icon="mdi-rocket-launch-outline"
+            >
+              Começar agora
+            </v-btn>
+          </v-card>
+        </v-col>
+      </v-row>
     </v-container>
   </v-main>
 
-  <v-footer
-  class="footer-gradient"
->
-   <v-container class="py-0">
-    <v-row
-      align="center"
-      justify="space-between"
-    >
-      <v-col
-        cols="12"
-        md="4"
-        class="text-center text-md-left"
-      >
-        <div class="footer-title">
-          WayToSchool
-        </div>
-        <div class="footer-subtitle">
-          Chegar e sair com mais segurança
-        </div>
-      </v-col>
+  <v-footer class="footer-gradient">
+    <v-container class="py-0">
+      <v-row align="center" justify="space-between">
+        <v-col cols="12" md="4" class="text-center text-md-left">
+          <div class="footer-title">WayToSchool</div>
+          <div class="footer-subtitle">Chegar e sair com mais tranquiliadade2</div>
+        </v-col>
 
-      <!-- Links -->
-      <v-col
-        cols="12"
-        md="4"
-        class="text-center"
-      >
-        <v-btn variant="text" class="footer-link">
-          Sobre
-        </v-btn>
-        <v-btn variant="text" class="footer-link">
-          Contato
-        </v-btn>
-        <v-btn variant="text" class="footer-link">
-          Privacidade
-        </v-btn>
-      </v-col>
+        <!-- Links -->
+        <v-col cols="12" md="4" class="text-center">
+          <v-btn variant="text" class="footer-link"> Sobre </v-btn>
+          <v-btn variant="text" class="footer-link"> Contato </v-btn>
+          <v-btn variant="text" class="footer-link"> Privacidade </v-btn>
+        </v-col>
 
-      <v-col
-        cols="12"
-        md="4"
-        class="text-center text-md-right"
-      >
-        <div class="footer-copy">
-          © {{ new Date().getFullYear() }} WayToSchool
-        </div>
-      </v-col>
-    </v-row>
-  </v-container>
-</v-footer>
-
+        <v-col cols="12" md="4" class="text-center text-md-right">
+          <div class="footer-copy">
+            © {{ new Date().getFullYear() }} WayToSchool
+          </div>
+        </v-col>
+      </v-row>
+    </v-container>
+  </v-footer>
 </template>
 
 <script setup>
@@ -226,11 +223,6 @@ const cardColor = (index) => {
   gap: 10px;
 }
 
-.btn-gradient {
-  color: white;
-  background: linear-gradient(135deg, #000508, #2f78a8);
-}
-
 .main-content {
   background: linear-gradient(
     to bottom right,
@@ -264,6 +256,7 @@ const cardColor = (index) => {
 .footer-gradient {
   background: linear-gradient(135deg, #000508, #2f78a8);
   color: white;
+  flex: 0 0 auto !important;
 }
 
 .footer-title {
@@ -290,7 +283,6 @@ const cardColor = (index) => {
   font-size: 0.8rem;
   opacity: 0.8;
 }
-
 
 @keyframes blink {
   50% {
