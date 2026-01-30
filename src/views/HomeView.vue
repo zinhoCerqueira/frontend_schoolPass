@@ -23,6 +23,7 @@
           rounded
           prepend-icon="mdi-account-plus-outline"
           color="white"
+          @click="registerDialog = true"
         >
           Cadastre-se
         </v-btn>
@@ -70,10 +71,7 @@
       </v-row>
       <v-row class="mt-4">
         <v-col cols="12">
-          <v-card
-            class="rounded-xl pa-8 text-center"
-            color="#405877"
-          >
+          <v-card class="rounded-xl pa-8 text-center" color="#405877">
             <div class="text-h4 font-weight-bold mb-4">
               Mais controle. Menos preocupação.
             </div>
@@ -102,10 +100,11 @@
       <v-row align="center" justify="space-between">
         <v-col cols="12" md="4" class="text-center text-md-left">
           <div class="footer-title">WayToSchool</div>
-          <div class="footer-subtitle">Chegar e sair com mais tranquiliadade2</div>
+          <div class="footer-subtitle">
+            Chegar e sair com mais tranquiliadade
+          </div>
         </v-col>
 
-        <!-- Links -->
         <v-col cols="12" md="4" class="text-center">
           <v-btn variant="text" class="footer-link"> Sobre </v-btn>
           <v-btn variant="text" class="footer-link"> Contato </v-btn>
@@ -120,6 +119,9 @@
       </v-row>
     </v-container>
   </v-footer>
+
+  <RegisterDialog v-model="registerDialog" />
+
 </template>
 
 <script setup>
