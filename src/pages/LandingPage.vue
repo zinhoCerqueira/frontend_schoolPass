@@ -59,10 +59,13 @@
       </v-col>
     </v-row>
   </v-container>
+
+  <AppFooter />
 </template>
 
 <script setup>
 import AppBar from "../components/AppBar.vue";
+import AppFooter from "../components/AppFooter.vue";
 
 const features = [
   {
