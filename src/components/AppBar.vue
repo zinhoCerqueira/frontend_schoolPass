@@ -20,8 +20,8 @@
   .title {
     color: #1f2a44;
     font-family: 'Playwrite AU TAS', cursive;
-    font-weight: 500;
-    font-size: clamp(18px, 2.5vw, 28px);
+    font-weight: 600; /* Sticking to the explicit request */
+    font-size: clamp(18px, 2.5vw, 28px); /* Using the provided font-size */
   }
 
   :deep(.v-toolbar-title__placeholder) {
@@ -29,5 +29,4 @@
   text-overflow: clip;
   white-space: nowrap;
 }
-
 </style>
