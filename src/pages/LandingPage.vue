@@ -13,16 +13,18 @@
         </p>
       </v-col>
       <v-col class="hero-col">
-  <v-btn variant="flat" rounded="lg" color="#4c6fff" class="index-fix">
-    Crie sua conta
-  </v-btn>
+        <v-btn variant="flat" rounded="lg" color="#4c6fff" class="index-fix">
+          Crie sua conta
+        </v-btn>
 
-  <v-img
-    class="hero-img"
-    src="@/assets/escola_simples_background.png"
-  />
-</v-col>
-
+        <v-img
+          class="hero-img"
+          src="@/assets/escola_simples_background.png"
+          width="400"
+          height="300"
+        />
+        />
+      </v-col>
     </v-row>
   </v-container>
 </template>
@@ -54,8 +56,8 @@ import AppBar from "../components/AppBar.vue";
 
 .hero-img {
   position: absolute;
-  top: -20px;
-  right: 0;
+  top: -30px;
+  right: -20px;
   z-index: 0;
   width: clamp(320px, 45vw, 620px);
 }
@@ -63,6 +65,4 @@ import AppBar from "../components/AppBar.vue";
 .index-fix {
   z-index: 1;
 }
-
-
 </style>
