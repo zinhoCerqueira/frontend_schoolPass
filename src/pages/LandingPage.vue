@@ -13,7 +13,7 @@
         </p>
       </v-col>
       <v-col class="hero-col">
-        <v-btn variant="flat" rounded="lg" color="#4c6fff" class="index-fix">
+        <v-btn variant="flat" rounded="lg" color="#4c6fff" class="index-fix btn-destaque">
           Crie sua conta
         </v-btn>
 
@@ -147,4 +147,15 @@ const features = [
 .index-fix {
   z-index: 1;
 }
+
+.btn-destaque {
+  animation: pulse 4s infinite;
+}
+
+@keyframes pulse {
+  0%   { box-shadow: 0 0 0 0 rgba(76,111,255,0.5); }
+  70%  { box-shadow: 0 0 0 12px rgba(76,111,255,0); }
+  100% { box-shadow: 0 0 0 0 rgba(76,111,255,0); }
+}
+
 </style>

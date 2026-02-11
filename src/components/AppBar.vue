@@ -6,7 +6,7 @@
 
     <v-spacer></v-spacer>
 
-    <v-btn variant="flat" rounded="lg" color="#4c6fff" class="mr-4">
+    <v-btn variant="flat" rounded="lg" color="#4c6fff" class="mr-4 btn-destaque">
       Experimente
     </v-btn>
   </v-app-bar>
@@ -20,8 +20,8 @@
   .title {
     color: #1f2a44;
     font-family: 'Playwrite AU TAS', cursive;
-    font-weight: 600; /* Sticking to the explicit request */
-    font-size: clamp(18px, 2.5vw, 28px); /* Using the provided font-size */
+    font-weight: 600;
+    font-size: clamp(18px, 2.5vw, 28px);
   }
 
   :deep(.v-toolbar-title__placeholder) {
@@ -29,4 +29,15 @@
   text-overflow: clip;
   white-space: nowrap;
 }
+
+.btn-destaque {
+  animation: pulse 4s infinite;
+}
+
+@keyframes pulse {
+  0%   { box-shadow: 0 0 0 0 rgba(76,111,255,0.5); }
+  70%  { box-shadow: 0 0 0 12px rgba(76,111,255,0); }
+  100% { box-shadow: 0 0 0 0 rgba(76,111,255,0); }
+}
+
 </style>
