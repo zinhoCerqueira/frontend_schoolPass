@@ -13,7 +13,13 @@
         </p>
       </v-col>
       <v-col class="hero-col">
-        <v-btn variant="flat" rounded="lg" color="#4c6fff" class="index-fix btn-destaque">
+        <v-btn
+          variant="flat"
+          rounded="lg"
+          color="#4c6fff"
+          class="index-fix btn-destaque"
+          @click="openAuth('register')"
+        >
           Crie sua conta
         </v-btn>
 
@@ -61,11 +67,44 @@
   </v-container>
 
   <AppFooter />
+
+  <v-dialog v-model="dialog" max-width="450" :fullscreen="isMobile">
+    <AuthForm @login="handleLogin" @register="handleRegister" :initial-tab="initialAuthTab" />
+  </v-dialog>
 </template>
 
 <script setup>
+import { ref } from 'vue';
+import { useDisplay } from 'vuetify';
+import { useRouter } from 'vue-router';
 import AppBar from "../components/AppBar.vue";
 import AppFooter from "../components/AppFooter.vue";
+import AuthForm from '../components/auth/AuthForm.vue';
+
+const dialog = ref(false);
+const router = useRouter();
+const { mobile } = useDisplay();
+const isMobile = ref(mobile.value);
+const initialAuthTab = ref('register'); // Always open to register for this button
+
+const openAuth = (tab) => {
+  initialAuthTab.value = tab;
+  if (isMobile.value) {
+    router.push({ path: '/auth', query: { tab: 'register' } });
+  } else {
+    dialog.value = true;
+  }
+};
+
+const handleLogin = (credentials) => {
+  console.log('Login credentials from LandingPage:', credentials);
+  dialog.value = false;
+};
+
+const handleRegister = (userData) => {
+  console.log('Register user data from LandingPage:', userData);
+  dialog.value = false;
+};
 
 const features = [
   {
@@ -159,3 +198,4 @@ const features = [
 }
 
 </style>
+
