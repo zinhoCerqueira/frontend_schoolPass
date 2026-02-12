@@ -1,16 +1,17 @@
 <template>
   <v-container class="d-flex justify-center align-center min-vh-100">
-    <AuthForm />
+    <AuthForm :initialTab="initialTab" />
   </v-container>
 </template>
 
 <script setup>
-import AuthForm from '../components/auth/AuthForm.vue';
-// No specific script logic needed for AuthPage itself, just rendering AuthForm
-</script>
+import { useRoute } from 'vue-router'
+import { computed } from 'vue'
+import AuthForm from '../components/auth/AuthForm.vue'
 
-<style scoped>
-.min-vh-100 {
-  min-height: 100vh;
-}
-</style>
+const route = useRoute()
+
+const initialTab = computed(() => {
+  return route.query.tab || 'login'
+})
+</script>

@@ -85,12 +85,12 @@ const dialog = ref(false);
 const router = useRouter();
 const { mobile } = useDisplay();
 const isMobile = ref(mobile.value);
-const initialAuthTab = ref('register'); // Always open to register for this button
+const initialAuthTab = ref('register');
 
 const openAuth = (tab) => {
   initialAuthTab.value = tab;
   if (isMobile.value) {
-    router.push({ path: '/auth', query: { tab: 'register' } });
+    router.push({ path: '/authpage', query: { tab } });
   } else {
     dialog.value = true;
   }
