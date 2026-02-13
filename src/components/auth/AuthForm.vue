@@ -118,6 +118,7 @@
         </v-card-text>
       </v-window-item>
     </v-window>
+    <ErrorDialog v-model="showErrorDialog" :message="errorMessage" />
   </v-card>
 </template>
 
@@ -125,6 +126,10 @@
 import { ref, watch } from 'vue';
 import { useDisplay } from 'vuetify';
 import { criarResponsavel, criarEscola } from '@/services/api';
+import ErrorDialog from '@/components/ErrorDialog.vue';
+
+const showErrorDialog = ref(false);
+const errorMessage = ref('');
 
 const props = defineProps({
   initialTab: {
@@ -181,12 +186,14 @@ const handleRegister = async () => {
     const { ...formData } = registerForm.value;
 
     if (formData.senha !== formData.confirmacao_senha) {
-      console.error('As senhas não coincidem.');
+      errorMessage.value = 'As senhas não coincidem.';
+      showErrorDialog.value = true;
       return;
     }
 
     if (!formData.nome || !formData.email || !formData.telefone || !formData.senha || !formData.confirmacao_senha) {
-      console.error('Por favor, preencha todos os campos obrigatórios.');
+      errorMessage.value = 'Por favor, preencha todos os campos obrigatórios.';
+      showErrorDialog.value = true;
       return;
     }
     
@@ -199,12 +206,13 @@ const handleRegister = async () => {
       console.log('Escola criada:', formData);
     }
     
-    emit('register', { userType, ...formData });
+    emit('register', { ...formData });
     // Optionally, switch to login tab or show a success message
     tab.value = 'login';
   } catch (error) {
+    errorMessage.value = error.response?.data?.error || 'Ocorreu um erro desconhecido.';
+    showErrorDialog.value = true;
     console.error('Erro no registro:', error.response?.data || error.message);
-    // Handle error (e.g., show a snackbar with the error message)
   }
 };
 
