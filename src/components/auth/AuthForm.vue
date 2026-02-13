@@ -52,7 +52,7 @@
         <v-card-text>
           <v-form @submit.prevent="handleRegister">
             <v-text-field
-              v-model="registerForm.name"
+              v-model="registerForm.nome"
               label="Nome"
               prepend-inner-icon="mdi-account"
               variant="outlined"
@@ -178,28 +178,23 @@ const handleLogin = () => {
 
 const handleRegister = async () => {
   try {
-    const { userType, ...formData } = registerForm.value;
+    const { ...formData } = registerForm.value;
 
-    // Universal password confirmation check
     if (formData.senha !== formData.confirmacao_senha) {
       console.error('As senhas não coincidem.');
-      // Maybe show an error to the user
       return;
     }
 
-    // Basic validation check before sending
     if (!formData.nome || !formData.email || !formData.telefone || !formData.senha || !formData.confirmacao_senha) {
-      // Here you could show a more user-friendly error
       console.error('Por favor, preencha todos os campos obrigatórios.');
-      console.log(registerForm);
       return;
     }
     
-    if (userType === 'responsavel') {
+    if (formData.userType === 'responsavel') {
       const { confirmacao_senha, ...responsavelData } = formData;
       await criarResponsavel(responsavelData);
       console.log('Responsável criado:', responsavelData);
-    } else { // userType is 'escola'
+    } else {
       await criarEscola(formData);
       console.log('Escola criada:', formData);
     }
