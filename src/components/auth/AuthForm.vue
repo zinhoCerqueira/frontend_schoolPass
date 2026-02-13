@@ -69,7 +69,15 @@
               required
             ></v-text-field>
             <v-text-field
-              v-model="registerForm.password"
+              v-model="registerForm.telefone"
+              label="Telefone"
+              prepend-inner-icon="mdi-phone"
+              variant="outlined"
+              :rules="[rules.required]"
+              required
+            ></v-text-field>
+            <v-text-field
+              v-model="registerForm.senha"
               label="Senha"
               type="password"
               prepend-inner-icon="mdi-lock"
@@ -78,7 +86,7 @@
               required
             ></v-text-field>
             <v-text-field
-              v-model="registerForm.confirmPassword"
+              v-model="registerForm.confirmacao_senha"
               label="Confirmar Senha"
               type="password"
               prepend-inner-icon="mdi-lock-check"
@@ -86,6 +94,18 @@
               :rules="[rules.required, rules.passwordMatch]"
               required
             ></v-text-field>
+            <div class="d-flex justify-center mt-4">
+              <v-btn-toggle
+                v-model="registerForm.userType"
+                color="primary"
+                variant="outlined"
+                mandatory
+                divided
+              >
+                <v-btn value="responsavel">Responsável</v-btn>
+                <v-btn value="escola">Escola</v-btn>
+              </v-btn-toggle>
+            </div>
             <v-btn
               type="submit"
               color="primary"
@@ -104,6 +124,7 @@
 <script setup>
 import { ref, watch } from 'vue';
 import { useDisplay } from 'vuetify';
+import { criarResponsavel, criarEscola } from '@/services/api';
 
 const props = defineProps({
   initialTab: {
@@ -129,10 +150,12 @@ const loginForm = ref({
 });
 
 const registerForm = ref({
-  name: '',
+  userType: 'responsavel',
+  nome: '',
   email: '',
-  password: '',
-  confirmPassword: '',
+  telefone: '',
+  senha: '',
+  confirmacao_senha: '',
 });
 
 const rules = {
@@ -142,7 +165,7 @@ const rules = {
     return pattern.test(value) || 'Email inválido.';
   },
   minPassword: value => value.length >= 6 || 'A senha deve ter no mínimo 6 caracteres.',
-  passwordMatch: value => value === registerForm.value.password || 'As senhas não coincidem.',
+  passwordMatch: value => value === registerForm.value.senha || 'As senhas não coincidem.',
 };
 
 const handleLogin = () => {
@@ -153,12 +176,41 @@ const handleLogin = () => {
   // For demonstration, you might close the dialog or navigate away here
 };
 
-const handleRegister = () => {
-  // In a real application, you would perform validation here
-  // and then emit the register event with the form data.
-  console.log('Register attempt:', registerForm.value);
-  emit('register', { ...registerForm.value });
-  // For demonstration, you might close the dialog or navigate away here
+const handleRegister = async () => {
+  try {
+    const { userType, ...formData } = registerForm.value;
+
+    // Universal password confirmation check
+    if (formData.senha !== formData.confirmacao_senha) {
+      console.error('As senhas não coincidem.');
+      // Maybe show an error to the user
+      return;
+    }
+
+    // Basic validation check before sending
+    if (!formData.nome || !formData.email || !formData.telefone || !formData.senha || !formData.confirmacao_senha) {
+      // Here you could show a more user-friendly error
+      console.error('Por favor, preencha todos os campos obrigatórios.');
+      console.log(registerForm);
+      return;
+    }
+    
+    if (userType === 'responsavel') {
+      const { confirmacao_senha, ...responsavelData } = formData;
+      await criarResponsavel(responsavelData);
+      console.log('Responsável criado:', responsavelData);
+    } else { // userType is 'escola'
+      await criarEscola(formData);
+      console.log('Escola criada:', formData);
+    }
+    
+    emit('register', { userType, ...formData });
+    // Optionally, switch to login tab or show a success message
+    tab.value = 'login';
+  } catch (error) {
+    console.error('Erro no registro:', error.response?.data || error.message);
+    // Handle error (e.g., show a snackbar with the error message)
+  }
 };
 
 watch(() => props.initialTab, (newVal) => {
