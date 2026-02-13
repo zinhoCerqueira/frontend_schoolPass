@@ -69,7 +69,11 @@
   <AppFooter />
 
   <v-dialog v-model="dialog" max-width="450" :fullscreen="isMobile">
-    <AuthForm @login="handleLogin" @register="handleRegister" :initial-tab="initialAuthTab" />
+    <AuthForm 
+      @login="handleLogin" 
+      @registration-success="handleRegistrationSuccess"
+      :initial-tab="initialAuthTab" 
+    />
   </v-dialog>
 </template>
 
@@ -101,8 +105,7 @@ const handleLogin = (credentials) => {
   dialog.value = false;
 };
 
-const handleRegister = (userData) => {
-  console.log('Register user data from LandingPage:', userData);
+const handleRegistrationSuccess = () => {
   dialog.value = false;
 };
 

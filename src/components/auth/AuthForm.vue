@@ -118,7 +118,12 @@
         </v-card-text>
       </v-window-item>
     </v-window>
-    <ErrorDialog v-model="showErrorDialog" :message="errorMessage" />
+    <FeedbackDialog 
+      v-model="showFeedbackDialog" 
+      :message="feedbackMessage" 
+      :type="feedbackType"
+      @confirm="handleFeedbackConfirm" 
+    />
   </v-card>
 </template>
 
@@ -126,10 +131,11 @@
 import { ref, watch } from 'vue';
 import { useDisplay } from 'vuetify';
 import { criarResponsavel, criarEscola } from '@/services/api';
-import ErrorDialog from '@/components/ErrorDialog.vue';
+import FeedbackDialog from '@/components/FeedbackDialog.vue';
 
-const showErrorDialog = ref(false);
-const errorMessage = ref('');
+const showFeedbackDialog = ref(false);
+const feedbackMessage = ref('');
+const feedbackType = ref('alert');
 
 const props = defineProps({
   initialTab: {
@@ -138,7 +144,7 @@ const props = defineProps({
   },
 });
 
-const emit = defineEmits(['login', 'register']);
+const emit = defineEmits(['login', 'register', 'registration-success']);
 
 const { mobile } = useDisplay();
 const isMobile = ref(mobile.value);
@@ -186,33 +192,43 @@ const handleRegister = async () => {
     const { ...formData } = registerForm.value;
 
     if (formData.senha !== formData.confirmacao_senha) {
-      errorMessage.value = 'As senhas não coincidem.';
-      showErrorDialog.value = true;
+      feedbackMessage.value = 'As senhas não coincidem.';
+      feedbackType.value = 'error';
+      showFeedbackDialog.value = true;
       return;
     }
 
     if (!formData.nome || !formData.email || !formData.telefone || !formData.senha || !formData.confirmacao_senha) {
-      errorMessage.value = 'Por favor, preencha todos os campos obrigatórios.';
-      showErrorDialog.value = true;
+      feedbackMessage.value = 'Por favor, preencha todos os campos obrigatórios.';
+      feedbackType.value = 'error';
+      showFeedbackDialog.value = true;
       return;
     }
     
     if (formData.userType === 'responsavel') {
       const { confirmacao_senha, ...responsavelData } = formData;
       await criarResponsavel(responsavelData);
-      console.log('Responsável criado:', responsavelData);
     } else {
       await criarEscola(formData);
-      console.log('Escola criada:', formData);
     }
     
-    emit('register', { ...formData });
-    // Optionally, switch to login tab or show a success message
-    tab.value = 'login';
+    feedbackMessage.value = 'Conta criada com sucesso! Você será redirecionado para o login.';
+    feedbackType.value = 'success';
+    showFeedbackDialog.value = true;
+
   } catch (error) {
-    errorMessage.value = error.response?.data?.error || 'Ocorreu um erro desconhecido.';
-    showErrorDialog.value = true;
+    feedbackMessage.value = error.response?.data?.error || 'Ocorreu um erro desconhecido.';
+    feedbackType.value = 'error';
+    showFeedbackDialog.value = true;
     console.error('Erro no registro:', error.response?.data || error.message);
+  }
+};
+
+const handleFeedbackConfirm = () => {
+  showFeedbackDialog.value = false;
+  if (feedbackType.value === 'success') {
+    emit('registration-success');
+    tab.value = 'login';
   }
 };
 
