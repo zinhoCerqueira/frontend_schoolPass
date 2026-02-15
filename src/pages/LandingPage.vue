@@ -70,8 +70,7 @@
 
   <v-dialog v-model="dialog" max-width="450" :fullscreen="isMobile">
     <AuthForm 
-      @login="handleLogin" 
-      @registration-success="handleRegistrationSuccess"
+      @close="dialog = false"
       :initial-tab="initialAuthTab" 
     />
   </v-dialog>
@@ -98,15 +97,6 @@ const openAuth = (tab) => {
   } else {
     dialog.value = true;
   }
-};
-
-const handleLogin = (credentials) => {
-  console.log('Login credentials from LandingPage:', credentials);
-  dialog.value = false;
-};
-
-const handleRegistrationSuccess = () => {
-  dialog.value = false;
 };
 
 const features = [

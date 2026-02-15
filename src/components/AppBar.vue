@@ -12,7 +12,7 @@
   </v-app-bar>
 
   <v-dialog v-model="dialog" max-width="450" :fullscreen="isMobile">
-    <AuthForm @login="handleLogin" @register="handleRegister" :initial-tab="initialAuthTab" />
+    <AuthForm @close="dialog = false" :initial-tab="initialAuthTab" />
   </v-dialog>
 </template>
 
@@ -35,16 +35,6 @@
     } else {
       dialog.value = true;
     }
-  };
-
-  const handleLogin = (credentials) => {
-    console.log('Login credentials:', credentials);
-    dialog.value = false;
-  };
-
-  const handleRegister = (userData) => {
-    console.log('Register user data:', userData);
-    dialog.value = false;
   };
 </script>
 

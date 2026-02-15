@@ -144,7 +144,7 @@ const props = defineProps({
   },
 });
 
-const emit = defineEmits(['login', 'register', 'registration-success']);
+const emit = defineEmits(['close']);
 
 const { mobile } = useDisplay();
 const isMobile = ref(mobile.value);
@@ -183,7 +183,7 @@ const handleLogin = () => {
   // In a real application, you would perform validation here
   // and then emit the login event with the form data.
   console.log('Login attempt:', loginForm.value);
-  emit('login', { ...loginForm.value });
+  emit('close');
   // For demonstration, you might close the dialog or navigate away here
 };
 
@@ -227,7 +227,7 @@ const handleRegister = async () => {
 const handleFeedbackConfirm = () => {
   showFeedbackDialog.value = false;
   if (feedbackType.value === 'success') {
-    emit('registration-success');
+    emit('close');
     tab.value = 'login';
   }
 };
