@@ -68,7 +68,7 @@
 
   <AppFooter />
 
-  <v-dialog v-model="dialog" max-width="450" :fullscreen="isMobile">
+  <v-dialog v-model="dialog" max-width="450" :fullscreen="smAndDown">
     <AuthForm 
       @close="dialog = false"
       :initial-tab="initialAuthTab" 
@@ -86,13 +86,12 @@ import AuthForm from '../components/auth/AuthForm.vue';
 
 const dialog = ref(false);
 const router = useRouter();
-const { mobile } = useDisplay();
-const isMobile = ref(mobile.value);
+const { smAndDown } = useDisplay();
 const initialAuthTab = ref('register');
 
 const openAuth = (tab) => {
   initialAuthTab.value = tab;
-  if (isMobile.value) {
+  if (smAndDown.value) {
     router.push({ path: '/authpage', query: { tab } });
   } else {
     dialog.value = true;
@@ -191,4 +190,3 @@ const features = [
 }
 
 </style>
-

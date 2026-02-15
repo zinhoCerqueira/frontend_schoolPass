@@ -11,7 +11,7 @@
     </v-btn>
   </v-app-bar>
 
-  <v-dialog v-model="dialog" max-width="450" :fullscreen="isMobile">
+  <v-dialog v-model="dialog" max-width="450" :fullscreen="smAndDown">
     <AuthForm @close="dialog = false" :initial-tab="initialAuthTab" />
   </v-dialog>
 </template>
@@ -24,13 +24,12 @@
 
   const dialog = ref(false);
   const router = useRouter();
-  const { mobile } = useDisplay();
-  const isMobile = ref(mobile.value);
+  const { smAndDown } = useDisplay();
   const initialAuthTab = ref('login');
 
   const openAuth = (tab) => {
     initialAuthTab.value = tab;
-    if (isMobile.value) {
+    if (smAndDown.value) {
       router.push({ path: '/authpage', query: { tab: tab === 'register' ? 'register' : 'login' } });
     } else {
       dialog.value = true;
@@ -63,4 +62,3 @@
 }
 
 </style>
-

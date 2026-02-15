@@ -1,9 +1,9 @@
 <template>
   <v-card
     class="mx-auto"
-    :max-width="isMobile ? '100%' : '420'"
-    :flat="isMobile"
-    :tile="isMobile"
+    :max-width="mobile ? '100%' : '420'"
+    :flat="mobile"
+    :tile="mobile"
   >
     <v-tabs
       v-model="tab"
@@ -147,11 +147,6 @@ const props = defineProps({
 const emit = defineEmits(['close']);
 
 const { mobile } = useDisplay();
-const isMobile = ref(mobile.value);
-
-watch(mobile, (newVal) => {
-  isMobile.value = newVal;
-});
 
 const tab = ref(props.initialTab);
 
