@@ -115,7 +115,7 @@
               type="submit"
               color="primary"
               block
-              class="mt-4"
+              class="mt-5"
             >
               Criar conta
             </v-btn>
@@ -123,6 +123,12 @@
         </v-card-text>
       </v-window-item>
     </v-window>
+    <v-card-actions>
+      <v-btn block variant="text" @click="$emit('close')">
+        <v-icon start icon="mdi-arrow-left"></v-icon>
+        Voltar
+      </v-btn>
+    </v-card-actions>
     <FeedbackDialog 
       v-model="showFeedbackDialog" 
       :message="feedbackMessage" 
