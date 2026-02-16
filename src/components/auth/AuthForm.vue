@@ -1,17 +1,23 @@
 <template>
   <v-card
-    class="mx-auto"
-    :max-width="mobile ? '100%' : '420'"
-    :flat="mobile"
-    :tile="mobile"
+    variant="flat"
+    class=""
+    width="400px"
+    rounded="lg"
   >
     <v-tabs
       v-model="tab"
       fixed-tabs
       color="primary"
     >
-      <v-tab value="login">Login</v-tab>
-      <v-tab value="register">Criar conta</v-tab>
+      <v-tab value="login">
+        <v-icon start icon="mdi-login"></v-icon>
+        Login
+      </v-tab>
+      <v-tab value="register">
+        <v-icon start icon="mdi-account-plus-outline"></v-icon>
+        Criar conta
+      </v-tab>
     </v-tabs>
 
     <v-window v-model="tab">
@@ -40,7 +46,6 @@
               type="submit"
               color="primary"
               block
-              class="mt-2"
             >
               Entrar
             </v-btn>
@@ -94,7 +99,7 @@
               :rules="[rules.required, rules.passwordMatch]"
               required
             ></v-text-field>
-            <div class="d-flex justify-center mt-4">
+            <div class="d-flex justify-center">
               <v-btn-toggle
                 v-model="registerForm.userType"
                 color="primary"
@@ -110,7 +115,7 @@
               type="submit"
               color="primary"
               block
-              class="mt-2"
+              class="mt-4"
             >
               Criar conta
             </v-btn>
@@ -129,7 +134,6 @@
 
 <script setup>
 import { ref, watch } from 'vue';
-import { useDisplay } from 'vuetify';
 import { criarResponsavel, criarEscola } from '@/services/api';
 import FeedbackDialog from '@/components/FeedbackDialog.vue';
 
@@ -145,8 +149,6 @@ const props = defineProps({
 });
 
 const emit = defineEmits(['close']);
-
-const { mobile } = useDisplay();
 
 const tab = ref(props.initialTab);
 
