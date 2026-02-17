@@ -82,7 +82,7 @@
               label="Telefone"
               prepend-inner-icon="mdi-phone"
               variant="outlined"
-              :rules="[rules.required]"
+              :rules="[rules.required, rules.telefone]"
               required
             ></v-text-field>
             <v-text-field
@@ -190,17 +190,19 @@ const rules = {
   },
   minPassword: value => value.length >= 6 || 'A senha deve ter no mínimo 6 caracteres.',
   passwordMatch: value => value === registerForm.value.senha || 'As senhas não coincidem.',
+  telefone: value => {
+    const len = value.length;
+    return (len === 11 || len === 13) || "O telefone deve ter 11 ou 13 digitos";
+  }
 };
 
 const handleLogin = () => {
-  // In a real application, you would perform validation here
-  // and then emit the login event with the form data.
   console.log('Login attempt:', loginForm.value);
   emit('close');
-  // For demonstration, you might close the dialog or navigate away here
 };
 
 const handleRegister = async () => {
+  let response;
   try {
     const { ...formData } = registerForm.value;
 
@@ -217,14 +219,22 @@ const handleRegister = async () => {
       showFeedbackDialog.value = true;
       return;
     }
-    
-    if (formData.userType === 'responsavel') {
-      const { confirmacao_senha, ...responsavelData } = formData;
-      await criarResponsavel(responsavelData);
-    } else {
-      await criarEscola(formData);
+
+    if (formData.telefone.length !== 11 && formData.telefone.length !== 13) {
+      feedbackMessage.value = "O telefone deve ter 11 ou 13 dígitos. Exemplo: '75999999999' ou '5575999999999'.";
+      feedbackType.value = 'alert';
+      showFeedbackDialog.value = true;
+      return;
     }
     
+    if (formData.userType === 'responsavel') {
+      response = await criarResponsavel(formData);
+    } else {
+      response = await criarEscola(formData);
+    }
+
+    console.log(response);
+
     feedbackMessage.value = 'Conta criada com sucesso! Você será redirecionado para o login.';
     feedbackType.value = 'success';
     showFeedbackDialog.value = true;
