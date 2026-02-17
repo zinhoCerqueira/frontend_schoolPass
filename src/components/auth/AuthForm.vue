@@ -40,8 +40,10 @@
             <v-text-field
               v-model="loginForm.password"
               label="Senha"
-              type="password"
+              :type="showPassword ? 'text' : 'password'"
               prepend-inner-icon="mdi-lock"
+              :append-inner-icon="showPassword ? 'mdi-eye-off' : 'mdi-eye'"
+              @click:append-inner="showPassword = !showPassword"
               variant="outlined"
               :rules="[rules.required]"
               required
@@ -88,8 +90,10 @@
             <v-text-field
               v-model="registerForm.senha"
               label="Senha"
-              type="password"
+              :type="showPassword ? 'text' : 'password'"
               prepend-inner-icon="mdi-lock"
+              :append-inner-icon="showPassword ? 'mdi-eye-off' : 'mdi-eye'"
+              @click:append-inner="showPassword = !showPassword"
               variant="outlined"
               :rules="[rules.required, rules.minPassword]"
               required
@@ -97,8 +101,10 @@
             <v-text-field
               v-model="registerForm.confirmacao_senha"
               label="Confirmar Senha"
-              type="password"
+              :type="showConfirmPassword ? 'text' : 'password'"
               prepend-inner-icon="mdi-lock-check"
+              :append-inner-icon="showConfirmPassword ? 'mdi-eye-off' : 'mdi-eye'"
+              @click:append-inner="showConfirmPassword = !showConfirmPassword"
               variant="outlined"
               :rules="[rules.required, rules.passwordMatch]"
               required
@@ -154,6 +160,8 @@ import { criarResponsavel, criarEscola } from '@/services/api';
 import FeedbackDialog from '@/components/FeedbackDialog.vue';
 
 const showFeedbackDialog = ref(false);
+const showPassword = ref(false);
+const showConfirmPassword = ref(false);
 const feedbackMessage = ref('');
 const feedbackType = ref('alert');
 
