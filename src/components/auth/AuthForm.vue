@@ -5,10 +5,14 @@
     width="400px"
     rounded="lg"
   >
+    <div class="text-center py-4 title d-flex align-center justify-center">
+      <v-icon start icon="mdi-school-outline"></v-icon>
+      <span>WayToSchool</span>
+    </div>
     <v-tabs
       v-model="tab"
       fixed-tabs
-      color="primary"
+      color="#1f2a44"
     >
       <v-tab value="login">
         <v-icon start icon="mdi-login"></v-icon>
@@ -44,7 +48,7 @@
             ></v-text-field>
             <v-btn
               type="submit"
-              color="primary"
+              color="#1f2a44"
               block
             >
               Entrar
@@ -124,7 +128,7 @@
       </v-window-item>
     </v-window>
     <v-card-actions>
-      <v-btn block variant="text" @click="$emit('close')">
+      <v-btn block variant="text" @click="$emit('close')" color="#1f2a44">
         <v-icon start icon="mdi-arrow-left"></v-icon>
         Voltar
       </v-btn>
@@ -244,4 +248,10 @@ watch(() => props.initialTab, (newVal) => {
 
 <style scoped>
 /* No specific styles needed for AuthForm itself as Vuetify handles most of it */
+.title {
+  color: #1f2a44;
+  font-family: 'Playwrite AU TAS', cursive;
+  font-weight: 600;
+  font-size: clamp(18px, 2.5vw, 28px);
+}
 </style>

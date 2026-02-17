@@ -1,7 +1,8 @@
 <template>
-  <v-app-bar color="#F2F3FE" scroll-behavior="elevate">
-    <v-app-bar-title class="title">
-      WayToSchool
+  <v-app-bar color="#F2F3FE" scroll-behavior="elevate" >
+    <v-app-bar-title class="title d-flex align-center">
+      <v-icon start icon="mdi-school-outline"></v-icon>
+      <span>WayToSchool</span>
     </v-app-bar-title>
 
     <v-spacer></v-spacer>
@@ -49,6 +50,8 @@
   overflow: visible;
   text-overflow: clip;
   white-space: nowrap;
+  display: flex;
+  align-items: center;
 }
 
 .btn-destaque {
