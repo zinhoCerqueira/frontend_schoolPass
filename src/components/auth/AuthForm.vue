@@ -111,13 +111,19 @@
                 mandatory
                 divided
               >
-                <v-btn value="responsavel">Responsável</v-btn>
-                <v-btn value="escola">Escola</v-btn>
+                <v-btn value="responsavel" color="#1f2a44">
+                  <v-icon start icon="mdi-check" v-if="registerForm.userType === 'responsavel'"></v-icon>
+                  Responsável
+                </v-btn>
+                <v-btn value="escola" color="#1f2a44">
+                  <v-icon start icon="mdi-check" v-if="registerForm.userType === 'escola'"></v-icon>
+                  Escola
+                </v-btn>
               </v-btn-toggle>
             </div>
             <v-btn
               type="submit"
-              color="primary"
+              color="#1f2a44"
               block
               class="mt-5"
             >
@@ -247,7 +253,6 @@ watch(() => props.initialTab, (newVal) => {
 </script>
 
 <style scoped>
-/* No specific styles needed for AuthForm itself as Vuetify handles most of it */
 .title {
   color: #1f2a44;
   font-family: 'Playwrite AU TAS', cursive;
