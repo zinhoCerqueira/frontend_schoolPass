@@ -273,7 +273,11 @@ const handleRegister = async () => {
     showFeedbackDialog.value = true;
 
   } catch (error) {
-    feedbackMessage.value = error.response?.data?.error || 'Ocorreu um erro desconhecido.';
+    if (!error.response) {
+      feedbackMessage.value = 'Falha de conexão com o servidor.';
+    } else {
+      feedbackMessage.value = error.response?.data?.error || 'Ocorreu um erro desconhecido.';
+    }
     feedbackType.value = 'error';
     showFeedbackDialog.value = true;
     console.error('Erro no registro:', error.response?.data || error.message);
