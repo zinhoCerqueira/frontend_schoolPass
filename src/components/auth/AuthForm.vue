@@ -38,7 +38,7 @@
               required
             ></v-text-field>
             <v-text-field
-              v-model="loginForm.password"
+              v-model="loginForm.senha"
               label="Senha"
               :type="showPassword ? 'text' : 'password'"
               prepend-inner-icon="mdi-lock"
@@ -156,8 +156,11 @@
 
 <script setup>
 import { ref, watch } from 'vue';
-import { criarResponsavel, criarEscola } from '@/services/api';
+import { useRouter } from 'vue-router';
+import { criarResponsavel, criarEscola, login } from '@/services/api';
 import FeedbackDialog from '@/components/FeedbackDialog.vue';
+
+const router = useRouter();
 
 const showFeedbackDialog = ref(false);
 const showPassword = ref(false);
@@ -178,7 +181,7 @@ const tab = ref(props.initialTab);
 
 const loginForm = ref({
   email: '',
-  password: '',
+  senha: '',
 });
 
 const registerForm = ref({
@@ -204,9 +207,31 @@ const rules = {
   }
 };
 
-const handleLogin = () => {
-  console.log('Login attempt:', loginForm.value);
-  emit('close');
+const handleLogin = async () => {
+  const { email, senha } = loginForm.value;
+  if (!email || !senha) {
+    feedbackMessage.value = 'Por favor, preencha todos os campos obrigatórios.';
+    feedbackType.value = 'error';
+    showFeedbackDialog.value = true;
+    return;
+  }
+
+  try {
+    await login(email, senha);
+    feedbackMessage.value = 'Login bem-sucedido! Redirecionando...';
+    feedbackType.value = 'success';
+    showFeedbackDialog.value = true;
+    
+  } catch (error) {
+    if (!error.response) {
+      feedbackMessage.value = 'Falha de conexão com o servidor.';
+    } else {
+      feedbackMessage.value = error.response?.data?.message || 'Email ou senha inválidos.';
+    }
+    feedbackType.value = 'error';
+    showFeedbackDialog.value = true;
+    console.error('Erro no login:', error.response?.data || error.message);
+  }
 };
 
 const handleRegister = async () => {
@@ -258,8 +283,12 @@ const handleRegister = async () => {
 const handleFeedbackConfirm = () => {
   showFeedbackDialog.value = false;
   if (feedbackType.value === 'success') {
-    emit('close');
-    tab.value = 'login';
+    if (feedbackMessage.value.includes('Login')) {
+      router.push('/');
+    } else {
+      emit('close');
+      tab.value = 'login';
+    }
   }
 };
 
