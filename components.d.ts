@@ -17,6 +17,8 @@ declare module 'vue' {
     ErrorDialog: typeof import('./src/components/ErrorDialog.vue')['default']
     FeedbackDialog: typeof import('./src/components/FeedbackDialog.vue')['default']
     HelloWorld: typeof import('./src/components/HelloWorld.vue')['default']
+    RespAppBar: typeof import('./src/components/resp/RespAppBar.vue')['default']
+    RespBottomNav: typeof import('./src/components/resp/RespBottomNav.vue')['default']
     RouterLink: typeof import('vue-router')['RouterLink']
     RouterView: typeof import('vue-router')['RouterView']
   }

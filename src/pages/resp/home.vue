@@ -1,5 +1,5 @@
 <template>
-  <v-container class="pa-4">
+  <v-container class="pa-4" color="blue-lighten-5" fluid>
     <v-card class="pa-4 mb-4" rounded="lg" elevation="0">
       <h2 class="text-h6 mb-2" style="color: #1f2a44;">Status da Saída</h2>
       <p class="text-body-2 text-grey-darken-1">
