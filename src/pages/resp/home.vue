@@ -11,8 +11,8 @@
           <v-icon icon="mdi-car-side" color="white" size="24"></v-icon>
         </v-sheet>
         <div>
-          <h2 class="text-h6 font-weight-bold title-text" style="line-height: 1.2;">Eaí ? Tá chegando ?</h2>
-          <p class="text-body-2 text-grey-darken-1 mt-1">Avise a escola que você está chegando.</p>
+          <h2 class="text-h6 font-weight-bold title-text" style="line-height: 1.2;">Eaí , tá chegando ?</h2>
+          <p class="text-body-2 text-grey-darken-1 mt-1">Avise a escola que você está a caminho.</p>
         </div>
       </div>
 
@@ -57,6 +57,19 @@
         <v-icon color="grey-lighten-1">mdi-chevron-right</v-icon>
       </div>
     </v-card>
+
+    <v-btn
+      block
+      height="64"
+      variant="outlined"
+      color="#1f2a44"
+      class="text-none"
+      rounded="lg"
+      style="border-style: dashed; border-width: 2px;"
+      prepend-icon="mdi-account-plus"
+    >
+      Adicionar Aluno
+    </v-btn>
   </v-container>
 </template>
 
