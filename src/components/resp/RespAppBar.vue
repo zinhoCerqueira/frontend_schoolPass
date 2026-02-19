@@ -2,7 +2,7 @@
   <v-app-bar color="white" scroll-behavior="elevate" height="70">
     <div class="d-flex flex-column ml-4 justify-center">
       <span class="text-caption text-primary" style="line-height: 1;">Bem vindo (a)</span>
-      <span class="text-h6 font-weight-bold title-text" style="line-height: 1.2;">Olá, Responsável</span>
+      <span class="text-h6 font-weight-bold title-text" style="line-height: 1.2;">Olá, {{ nome }}</span>
     </div>
 
     <v-spacer></v-spacer>
@@ -14,6 +14,13 @@
 </template>
 
 <script setup>
+import { ref, onMounted } from 'vue';
+
+const nome = ref('');
+
+onMounted(() => {
+  nome.value = localStorage.getItem('nome');
+});
 </script>
 
 <style scoped>

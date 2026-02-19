@@ -20,7 +20,9 @@ export const login = async (email, senha) => {
     const response = await apiClient.post('/auth/login', { email, senha });
     if (response.data.access_token && response.data.perfil) {
       localStorage.setItem('access_token', response.data.access_token);
-      localStorage.setItem('perfil', JSON.stringify(response.data.perfil));
+      localStorage.setItem('perfil', response.data.perfil);
+      localStorage.setItem('nome', response.data.nome);
+      localStorage.setItem('sobrenome', response.data.sobrenome);
     }
     return response.data;
   } catch (error) {
