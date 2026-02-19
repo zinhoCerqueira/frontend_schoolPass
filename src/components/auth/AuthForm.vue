@@ -27,7 +27,7 @@
     <v-window v-model="tab">
       <v-window-item value="login">
         <v-card-text>
-          <v-form @submit.prevent="handleLogin">
+          <v-form ref="loginFormRef" @submit.prevent="handleLogin">
             <v-text-field
               v-model="loginForm.email"
               label="Email"
@@ -61,10 +61,18 @@
 
       <v-window-item value="register">
         <v-card-text>
-          <v-form @submit.prevent="handleRegister">
+          <v-form ref="registerFormRef" @submit.prevent="handleRegister">
             <v-text-field
               v-model="registerForm.nome"
               label="Nome"
+              prepend-inner-icon="mdi-account"
+              variant="outlined"
+              :rules="[rules.required, rules.singleWord, rules.minLength]"
+              required
+            ></v-text-field>
+            <v-text-field
+              v-model="registerForm.sobrenome"
+              label="Sobrenome"
               prepend-inner-icon="mdi-account"
               variant="outlined"
               :rules="[rules.required]"
@@ -160,6 +168,9 @@ import { useRouter } from 'vue-router';
 import { criarResponsavel, criarEscola, login } from '@/services/api';
 import FeedbackDialog from '@/components/FeedbackDialog.vue';
 
+const loginFormRef = ref(null);
+const registerFormRef = ref(null);
+
 const router = useRouter();
 
 const showFeedbackDialog = ref(false);
@@ -187,6 +198,7 @@ const loginForm = ref({
 const registerForm = ref({
   userType: 'responsavel',
   nome: '',
+  sobrenome: '',
   email: '',
   telefone: '',
   senha: '',
@@ -204,19 +216,25 @@ const rules = {
   telefone: value => {
     const len = value.length;
     return (len === 11 || len === 13) || "O telefone deve ter 11 ou 13 digitos";
-  }
+  },
+  singleWord: value => {
+    const words = value.trim().split(/\s+/);
+    return words.length === 1 || 'O nome deve conter apenas uma palavra.';
+  },
+  minLength: value => value.length >= 2 || 'O nome deve ter no mínimo 2 letras.'
 };
 
 const handleLogin = async () => {
-  const { email, senha } = loginForm.value;
-  if (!email || !senha) {
-    feedbackMessage.value = 'Por favor, preencha todos os campos obrigatórios.';
-    feedbackType.value = 'error';
+  const { valid } = await loginFormRef.value.validate();
+  if (!valid) {
+    feedbackMessage.value = 'Existem campos com dados incorretos ou faltando, confira o formulário.';
+    feedbackType.value = 'alert';
     showFeedbackDialog.value = true;
     return;
   }
 
   try {
+    const { email, senha } = loginForm.value;
     await login(email, senha);
     feedbackMessage.value = 'Login bem-sucedido! Redirecionando...';
     feedbackType.value = 'success';
@@ -235,19 +253,20 @@ const handleLogin = async () => {
 };
 
 const handleRegister = async () => {
+  const { valid } = await registerFormRef.value.validate();
+  if (!valid) {
+    feedbackMessage.value = 'Existem campos com dados incorretos ou faltando, confira o formulário.';
+    feedbackType.value = 'alert';
+    showFeedbackDialog.value = true;
+    return;
+  }
+
   let response;
   try {
     const { ...formData } = registerForm.value;
 
     if (formData.senha !== formData.confirmacao_senha) {
       feedbackMessage.value = 'As senhas não coincidem.';
-      feedbackType.value = 'error';
-      showFeedbackDialog.value = true;
-      return;
-    }
-
-    if (!formData.nome || !formData.email || !formData.telefone || !formData.senha || !formData.confirmacao_senha) {
-      feedbackMessage.value = 'Por favor, preencha todos os campos obrigatórios.';
       feedbackType.value = 'error';
       showFeedbackDialog.value = true;
       return;
