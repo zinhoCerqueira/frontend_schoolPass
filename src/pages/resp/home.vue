@@ -28,13 +28,11 @@
       </v-btn>
     </v-card>
 
-    <!-- Seção Meus Alunos -->
     <div class="d-flex align-center justify-space-between mt-8 mb-2">
       <h2 class="text-h6 font-weight-bold section-title">Meus Alunos</h2>
       <v-chip color="primary" variant="tonal" size="small" label>2 Ativos</v-chip>
     </div>
 
-    <!-- Lista de Alunos -->
     <v-card
       v-for="aluno in alunos"
       :key="aluno.id"
@@ -107,4 +105,5 @@ const alunos = ref([
 <route lang="yaml">
 meta:
   layout: responsavel_layout
+  requiresAuth: true
 </route>

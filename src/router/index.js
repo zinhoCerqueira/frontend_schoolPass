@@ -14,7 +14,20 @@ const router = createRouter({
   routes: setupLayouts(routes),
 })
 
-// Workaround for https://github.com/vitejs/vite/issues/11804
+router.beforeEach((to, from, next) => {
+
+  const token = localStorage.getItem('access_token')
+
+  const requiresAuth = to.matched.some(record => {
+    return record.meta.requiresAuth
+  })
+
+  if (requiresAuth && !token) {
+    return next('/')
+  }
+  next()
+})
+
 router.onError((err, to) => {
   if (err?.message?.includes?.('Failed to fetch dynamically imported module')) {
     if (localStorage.getItem('vuetify:dynamic-reload')) {
