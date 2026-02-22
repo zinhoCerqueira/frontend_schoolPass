@@ -15,6 +15,10 @@ export const criarEscola = (data) => {
   return apiClient.post('/escolas', data);
 };
 
+export const criarAluno = (data) => {
+  return apiClient.post('/alunos', data);
+};
+
 export const login = async (email, senha) => {
   try {
     const response = await apiClient.post('/auth/login', { email, senha });
@@ -23,6 +27,7 @@ export const login = async (email, senha) => {
       localStorage.setItem('perfil', response.data.perfil);
       localStorage.setItem('nome', response.data.nome);
       localStorage.setItem('sobrenome', response.data.sobrenome);
+      localStorage.setItem('id_token', response.data.id);
     }
     return response.data;
   } catch (error) {

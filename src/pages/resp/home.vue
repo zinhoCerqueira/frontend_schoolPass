@@ -65,6 +65,7 @@
       rounded="lg"
       style="border-style: dashed; border-width: 2px;"
       prepend-icon="mdi-account-plus"
+      @click="router.push('/resp/add-student')"
     >
       Adicionar Aluno
     </v-btn>
@@ -73,6 +74,9 @@
 
 <script setup>
 import { ref } from 'vue';
+import { useRouter } from 'vue-router';
+
+const router = useRouter();
 
 const alunos = ref([
   {
