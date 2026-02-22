@@ -30,7 +30,7 @@
 
     <div class="d-flex align-center justify-space-between mt-8 mb-2">
       <h2 class="text-h6 font-weight-bold section-title">Meus Alunos</h2>
-      <v-chip color="primary" variant="tonal" size="small" label>2 Ativos</v-chip>
+      <v-chip color="primary" variant="tonal" size="small" label>{{ alunos.length }} Ativos</v-chip>
     </div>
 
     <v-card
@@ -73,26 +73,35 @@
 </template>
 
 <script setup>
-import { ref } from 'vue';
+import { ref, onMounted } from 'vue';
 import { useRouter } from 'vue-router';
+import { getAlunos } from '@/services/api';
 
 const router = useRouter();
+const alunos = ref([]);
 
-const alunos = ref([
-  {
-    id: 1,
-    nome: 'Lucas Matos',
-    info: '5º ano - Turma B',
-    // A foto real do aluno virá do backend, esta é uma imagem temporária
-    avatar: 'https://media.gettyimages.com/id/1899572945/pt/foto/portrait-of-a-girl-student-on-art-class-at-school.jpg?s=612x612&w=gi&k=20&c=Yl0dZhE0uyKPjYLb3FLo1WJuJ5oY4Ut5QFtA1vuGbXg='
-  },
-  { id: 2,
-    nome: 'Júlia Martins',
-    info: '3º ano - Turma A',
-    // A foto real do aluno virá do backend, esta é uma imagem temporária
-    avatar: 'https://media.gettyimages.com/id/2203067603/pt/foto/schoolboy-sitting-at-desk-smiling-looking-sideways.jpg?s=1024x1024&w=gi&k=20&c=y7NAh9-Vw2Q06mcaLgCDcVC1_Oqs3a0l1Y80_Q-gB2o='
-  },
-]);
+const fetchAlunos = async () => {
+  try {
+    const responsavelId = localStorage.getItem('id_token');
+    if (!responsavelId) return;
+
+    const response = await getAlunos(responsavelId);
+    const data = response.data;
+
+    alunos.value = data.map(aluno => ({
+      id: aluno.id,
+      nome: `${aluno.nome} ${aluno.sobrenome || ''}`.trim(),
+      info: `${aluno.ano}º ano - ${aluno.ensino === 'm' ? 'Ensino Médio' : 'Ensino Fundamental'}`,
+      avatar: aluno.avatar || 'https://media.gettyimages.com/id/1899572945/pt/foto/portrait-of-a-girl-student-on-art-class-at-school.jpg?s=612x612&w=gi&k=20&c=Yl0dZhE0uyKPjYLb3FLo1WJuJ5oY4Ut5QFtA1vuGbXg='
+    }));
+  } catch (error) {
+    console.error('Erro ao buscar alunos:', error);
+  }
+};
+
+onMounted(() => {
+  fetchAlunos();
+});
 </script>
 
 <style scoped>

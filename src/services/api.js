@@ -19,6 +19,10 @@ export const criarAluno = (data) => {
   return apiClient.post('/alunos', data);
 };
 
+export const getAlunos = (responsavelId) => {
+  return apiClient.get(`/alunos?responsavel_id=${responsavelId}`);
+};
+
 export const login = async (email, senha) => {
   try {
     const response = await apiClient.post('/auth/login', { email, senha });
