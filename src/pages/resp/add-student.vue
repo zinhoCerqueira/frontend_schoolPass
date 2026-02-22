@@ -1,5 +1,5 @@
 <template>
-  <v-container class="pa-4" fluid>
+  <v-container>
     <div class="text-center py-2 title-text d-flex align-center justify-center">
       <v-icon start icon="mdi-account-plus-outline"></v-icon>
       <span>Adicionar Novo Aluno</span>
@@ -17,7 +17,15 @@
       </div>
       <v-text-field
         v-model="studentForm.nome"
-        label="Nome completo"
+        label="Nome"
+        prepend-inner-icon="mdi-account"
+        variant="outlined"
+        :rules="[rules.required, rules.singleWord]"
+        required
+      ></v-text-field>
+      <v-text-field
+        v-model="studentForm.sobrenome"
+        label="Sobrenome"
         prepend-inner-icon="mdi-account"
         variant="outlined"
         :rules="[rules.required]"
@@ -102,6 +110,7 @@ const feedbackType = ref('alert');
 
 const studentForm = ref({
   nome: '',
+  sobrenome: '',
   ano: null,
   ensino: null,
 });
@@ -142,6 +151,10 @@ watch(() => studentForm.value.ensino, () => {
 
 const rules = {
   required: value => !!value || 'Campo obrigatório.',
+  singleWord: value => {
+    const words = value.trim().split(/\s+/);
+    return words.length === 1 || 'O nome deve conter apenas uma palavra.';
+  },
 };
 
 const handleCreateStudent = async () => {
