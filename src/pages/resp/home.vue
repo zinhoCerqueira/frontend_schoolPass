@@ -92,7 +92,7 @@ const fetchAlunos = async () => {
       id: aluno.id,
       nome: `${aluno.nome} ${aluno.sobrenome || ''}`.trim(),
       info: `${aluno.ano}º ano - ${aluno.ensino === 'm' ? 'Ensino Médio' : 'Ensino Fundamental'}`,
-      avatar: aluno.avatar || 'https://media.gettyimages.com/id/1899572945/pt/foto/portrait-of-a-girl-student-on-art-class-at-school.jpg?s=612x612&w=gi&k=20&c=Yl0dZhE0uyKPjYLb3FLo1WJuJ5oY4Ut5QFtA1vuGbXg='
+      avatar: aluno.avatar || 'https://static.vecteezy.com/ti/vetor-gratis/p1/15278806-o-avatar-do-graduado-icone-do-aluno-ilustracaoial-em-um-estilo-plano-isolado-em-um-fundo-branco-vetor.jpg'
     }));
   } catch (error) {
     console.error('Erro ao buscar alunos:', error);
