@@ -7,12 +7,40 @@ const apiClient = axios.create({
   },
 });
 
-export const criarResponsavel = (data) => {
-  return apiClient.post('/responsaveis', data);
+export const criarResponsavel = async (data) => {
+  try {
+    const response = await apiClient.post('/responsaveis', data);
+    const userData = response.data.responsavel;
+    if (userData) {
+      localStorage.setItem('access_token', 'mock_access_token_for_newly_created_user');
+      localStorage.setItem('perfil', 'responsavel');
+      localStorage.setItem('nome', userData.nome);
+      localStorage.setItem('sobrenome', userData.sobrenome);
+      localStorage.setItem('id_token', userData.id);
+    }
+    return response.data;
+  } catch (error) {
+    console.error('Guardian creation failed:', error);
+    throw error;
+  }
 };
 
-export const criarEscola = (data) => {
-  return apiClient.post('/escolas', data);
+export const criarEscola = async (data) => {
+  try {
+    const response = await apiClient.post('/escolas', data);
+    const userData = response.data.escola;
+    if (userData) {
+      localStorage.setItem('access_token', 'mock_access_token_for_newly_created_user');
+      localStorage.setItem('perfil', 'escola');
+      localStorage.setItem('nome', userData.nome);
+      localStorage.setItem('sobrenome', userData.sobrenome);
+      localStorage.setItem('id_token', userData.id);
+    }
+    return response.data;
+  } catch (error) {
+    console.error('School creation failed:', error);
+    throw error;
+  }
 };
 
 export const criarAluno = (data) => {

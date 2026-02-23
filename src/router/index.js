@@ -15,7 +15,7 @@ const router = createRouter({
 })
 
 router.beforeEach((to, from, next) => {
-
+  
   const token = localStorage.getItem('access_token')
 
   const requiresAuth = to.matched.some(record => {

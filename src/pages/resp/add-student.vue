@@ -168,7 +168,6 @@ const handleCreateStudent = async () => {
 
   loading.value = true;
   try {
-    debugger;
     const responsavelId = localStorage.getItem('id_token');
     if (!responsavelId) {
       throw new Error('ID do responsável não encontrado.');
