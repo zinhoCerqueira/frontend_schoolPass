@@ -87,7 +87,7 @@ const router = useRouter();
 const alunos = ref([]);
 
 const goToEditPage = (id) => {
-  router.push(`/resp/edit-student/${id}`);
+  router.push({ path: '/resp/edit-student', state: { studentId: id } });
 };
 
 const fetchAlunos = async () => {
