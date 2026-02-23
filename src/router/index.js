@@ -14,18 +14,20 @@ const router = createRouter({
   routes: setupLayouts(routes),
 })
 
-router.beforeEach((to, from, next) => {
-  
+router.beforeEach((to) => {
+  debugger
   const token = localStorage.getItem('access_token')
+  const perfil = localStorage.getItem('perfil')
 
-  const requiresAuth = to.matched.some(record => {
-    return record.meta.requiresAuth
-  })
-
-  if (requiresAuth && !token) {
-    return next('/')
+  if (to.meta.requiresAuth && !token) {
+    return '/login'
   }
-  next()
+
+  if (token && to.path === '/authpage') {
+    return perfil === 'responsavel'
+      ? '/resp/home'
+      : '/'
+  }
 })
 
 router.onError((err, to) => {
