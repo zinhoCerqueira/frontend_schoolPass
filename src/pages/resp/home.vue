@@ -1,6 +1,6 @@
 <template>
   <v-container class="pa-4" fluid>
-    <v-card class="pa-4 mb-4" rounded="lg" elevation="0">
+    <v-card class="pa-4 mb-4" rounded="lg" elevation="0" style="border: 1px solid #D2D2D8;">
       <div class="d-flex align-center">
         <v-sheet
           color="#1f2a44"
@@ -18,7 +18,7 @@
 
       <v-btn
         block
-        color="#4c6fff"
+        color="#1f2a44"
         class="mt-4 text-none"
         rounded="lg"
         flat
@@ -44,6 +44,7 @@
         class="mb-3"
         flat
         rounded="lg"
+        style="border: 1px solid #D2D2D8;"
       >
         <div class="d-flex align-center pa-3">
           <v-avatar size="48" class="mr-4">
