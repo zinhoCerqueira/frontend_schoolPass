@@ -33,28 +33,34 @@
       <v-chip color="primary" variant="tonal" size="small" label>{{ alunos.length }} Ativos</v-chip>
     </div>
 
-    <v-card
+    <div
       v-for="aluno in alunos"
       :key="aluno.id"
-      class="mb-3"
-      flat
-      rounded="lg"
+      @click="goToEditPage(aluno.id)"
+      style="cursor: pointer"
+      class="aluno-card"
     >
-      <div class="d-flex align-center pa-3">
-        <v-avatar size="48" class="mr-4">
-          <v-img :src="aluno.avatar" :alt="aluno.nome"></v-img>
-        </v-avatar>
+      <v-card
+        class="mb-3"
+        flat
+        rounded="lg"
+      >
+        <div class="d-flex align-center pa-3">
+          <v-avatar size="48" class="mr-4">
+            <v-img :src="aluno.avatar" :alt="aluno.nome"></v-img>
+          </v-avatar>
 
-        <div>
-          <div class="font-weight-bold text-grey-darken-4">{{ aluno.nome }}</div>
-          <div class="text-body-2 text-grey-darken-1">{{ aluno.info }}</div>
+          <div>
+            <div class="font-weight-bold text-grey-darken-4">{{ aluno.nome }}</div>
+            <div class="text-body-2 text-grey-darken-1">{{ aluno.info }}</div>
+          </div>
+
+          <v-spacer></v-spacer>
+
+          <v-icon color="grey-lighten-1">mdi-chevron-right</v-icon>
         </div>
-
-        <v-spacer></v-spacer>
-
-        <v-icon color="grey-lighten-1">mdi-chevron-right</v-icon>
-      </div>
-    </v-card>
+      </v-card>
+    </div>
 
     <v-btn
       block
@@ -79,6 +85,10 @@ import { getAlunos } from '@/services/api';
 
 const router = useRouter();
 const alunos = ref([]);
+
+const goToEditPage = (id) => {
+  router.push(`/resp/edit-student/${id}`);
+};
 
 const fetchAlunos = async () => {
   try {

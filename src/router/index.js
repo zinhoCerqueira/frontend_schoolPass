@@ -15,7 +15,6 @@ const router = createRouter({
 })
 
 router.beforeEach((to) => {
-  debugger
   const token = localStorage.getItem('access_token')
   const perfil = localStorage.getItem('perfil')
 

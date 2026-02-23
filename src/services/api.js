@@ -51,6 +51,14 @@ export const getAlunos = (responsavelId) => {
   return apiClient.get(`/alunos?responsavel_id=${responsavelId}`);
 };
 
+export const getAluno = (id) => {
+  return apiClient.get(`/alunos/${id}`);
+};
+
+export const updateAluno = (id, data) => {
+  return apiClient.patch(`/alunos/${id}`, data);
+};
+
 export const login = async (email, senha) => {
   try {
     const response = await apiClient.post('/auth/login', { email, senha });

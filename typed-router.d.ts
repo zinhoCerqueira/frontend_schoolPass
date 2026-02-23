@@ -24,6 +24,7 @@ declare module 'vue-router/auto-routes' {
     '/LandingPage': RouteRecordInfo<'/LandingPage', '/LandingPage', Record<never, never>, Record<never, never>>,
     '/Login': RouteRecordInfo<'/Login', '/Login', Record<never, never>, Record<never, never>>,
     '/resp/add-student': RouteRecordInfo<'/resp/add-student', '/resp/add-student', Record<never, never>, Record<never, never>>,
+    '/resp/edit-student/[id]': RouteRecordInfo<'/resp/edit-student/[id]', '/resp/edit-student/:id', { id: ParamValue<true> }, { id: ParamValue<false> }>,
     '/resp/home': RouteRecordInfo<'/resp/home', '/resp/home', Record<never, never>, Record<never, never>>,
   }
 
@@ -60,6 +61,10 @@ declare module 'vue-router/auto-routes' {
     }
     'src/pages/resp/add-student.vue': {
       routes: '/resp/add-student'
+      views: never
+    }
+    'src/pages/resp/edit-student/[id].vue': {
+      routes: '/resp/edit-student/[id]'
       views: never
     }
     'src/pages/resp/home.vue': {
