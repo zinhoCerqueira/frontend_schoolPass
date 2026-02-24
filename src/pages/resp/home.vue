@@ -23,6 +23,7 @@
         rounded="lg"
         flat
         append-icon="mdi-arrow-right"
+        @click="router.push('/resp/on-my-way')"
       >
         Estou a caminho
       </v-btn>

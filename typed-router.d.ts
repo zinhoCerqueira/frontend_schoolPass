@@ -27,6 +27,7 @@ declare module 'vue-router/auto-routes' {
     '/resp/edit-profile': RouteRecordInfo<'/resp/edit-profile', '/resp/edit-profile', Record<never, never>, Record<never, never>>,
     '/resp/edit-student': RouteRecordInfo<'/resp/edit-student', '/resp/edit-student', Record<never, never>, Record<never, never>>,
     '/resp/home': RouteRecordInfo<'/resp/home', '/resp/home', Record<never, never>, Record<never, never>>,
+    '/resp/on-my-way': RouteRecordInfo<'/resp/on-my-way', '/resp/on-my-way', Record<never, never>, Record<never, never>>,
   }
 
   /**
@@ -74,6 +75,10 @@ declare module 'vue-router/auto-routes' {
     }
     'src/pages/resp/home.vue': {
       routes: '/resp/home'
+      views: never
+    }
+    'src/pages/resp/on-my-way.vue': {
+      routes: '/resp/on-my-way'
       views: never
     }
   }
