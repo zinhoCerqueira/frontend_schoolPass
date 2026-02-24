@@ -104,7 +104,6 @@ const router = useRouter();
 const studentFormRef = ref(null);
 const loading = ref(false);
 
-// Recupera o ID do estado da navegação (invisível na URL)
 const studentId = history.state?.studentId;
 
 const showFeedbackDialog = ref(false);
@@ -148,8 +147,10 @@ const anoOptions = computed(() => {
   return [];
 });
 
-watch(() => studentForm.value.ensino, () => {
-  studentForm.value.ano = null;
+watch(() => studentForm.value.ensino, (newEnsino, oldEnsino) => {
+  if (oldEnsino !== null) {
+    studentForm.value.ano = null;
+  }
 });
 
 const rules = {
@@ -165,7 +166,21 @@ const fetchStudentData = async () => {
   try {
     const response = await getAluno(studentId);
     const { nome, sobrenome, ano, ensino } = response.data;
-    studentForm.value = { nome, sobrenome, ano, ensino };
+    studentForm.value.nome = nome;
+    studentForm.value.sobrenome = sobrenome;
+    if (ensino) {
+      const ensinoStr = String(ensino).toLowerCase();
+      if (ensinoStr.includes('médio') || ensinoStr.includes('medio')) {
+        studentForm.value.ensino = 'm';
+      } else if (ensinoStr.includes('fundamental')) {
+        studentForm.value.ensino = 'f';
+      } else {
+        studentForm.value.ensino = null;
+      }
+    } else {
+      studentForm.value.ensino = null;
+    }
+    studentForm.value.ano = ano ? Number(ano) : null;
   } catch (error) {
     feedbackMessage.value = 'Erro ao buscar dados do aluno.';
     feedbackType.value = 'error';
@@ -214,8 +229,6 @@ const handleFeedbackConfirm = () => {
 
 onMounted(() => {
   if (!studentId) {
-    // Se o usuário acessar a URL diretamente sem passar pela home,
-    // não teremos o ID, então redirecionamos de volta.
     router.replace('/resp/home');
     return;
   }
