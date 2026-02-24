@@ -2,9 +2,13 @@
   <v-container
     class="auth-container d-flex justify-center align-center fill-height"
   >
-    <div class="circle-1"></div>
-    <div class="circle-2"></div>
-    <div class="circle-3"></div>
+    <div class="circle-1">
+      <v-icon class="bg-icon icon-school" icon="mdi-school-outline"></v-icon>
+    </div>
+    <div class="circle-2">
+      <v-icon class="bg-icon icon-car" icon="mdi-car-side"></v-icon>
+    </div>
+
     <AuthForm :initialTab="initialTab" @close="handleClose" class="auth-form" />
   </v-container>
 </template>
@@ -42,6 +46,9 @@ const handleClose = () => {
   border-radius: 50%;
   background-color: #aaadd5;
   z-index: 0;
+  display: flex;
+  justify-content: center;
+  align-items: center;
 }
 
 .circle-1 {
@@ -58,4 +65,18 @@ const handleClose = () => {
   right: -200px;
 }
 
+.bg-icon {
+  color: #d1d3ed; 
+  pointer-events: none;
+}
+
+.icon-school {
+  font-size: 200px; 
+  transform: translate(25%, 25%) rotate(15deg); 
+}
+
+.icon-car {
+  font-size: 300px;
+  transform: translate(-25%, -25%) rotate(-10deg);
+}
 </style>
