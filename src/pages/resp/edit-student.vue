@@ -22,6 +22,8 @@
         variant="outlined"
         :rules="[rules.required, rules.singleWord]"
         required
+        bg-color="white"
+        color="#1f2a44"
       ></v-text-field>
       <v-text-field
         v-model="studentForm.sobrenome"
@@ -30,6 +32,8 @@
         variant="outlined"
         :rules="[rules.required]"
         required
+        bg-color="white"
+        color="#1f2a44"
       ></v-text-field>
       <v-select
         v-model="studentForm.ensino"
@@ -41,6 +45,8 @@
         variant="outlined"
         :rules="[rules.required]"
         required
+        bg-color="white"
+        color="#1f2a44"
       ></v-select>
       <v-select
         v-model="studentForm.ano"
@@ -51,6 +57,8 @@
         :rules="[rules.required]"
         required
         :disabled="!studentForm.ensino"
+        bg-color="white"
+        color="#1f2a44"
       ></v-select>
 
       <v-btn

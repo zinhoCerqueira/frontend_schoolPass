@@ -27,6 +27,8 @@
               variant="outlined"
               :rules="[rules.required, rules.email]"
               required
+              bg-color="white"
+              color="#1f2a44"
             ></v-text-field>
             <v-text-field
               v-model="loginForm.senha"
@@ -38,6 +40,8 @@
               variant="outlined"
               :rules="[rules.required]"
               required
+              bg-color="white"
+              color="#1f2a44"
             ></v-text-field>
             <v-btn type="submit" color="#1f2a44" block> Entrar </v-btn>
           </v-form>
@@ -54,6 +58,8 @@
               variant="outlined"
               :rules="[rules.required, rules.singleWord, rules.minLength]"
               required
+              bg-color="white"
+              color="#1f2a44"
             ></v-text-field>
             <v-text-field
               v-model="registerForm.sobrenome"
@@ -62,6 +68,8 @@
               variant="outlined"
               :rules="[rules.required]"
               required
+              bg-color="white"
+              color="#1f2a44"
             ></v-text-field>
             <v-text-field
               v-model="registerForm.email"
@@ -71,6 +79,8 @@
               variant="outlined"
               :rules="[rules.required, rules.email]"
               required
+              bg-color="white"
+              color="#1f2a44"
             ></v-text-field>
             <v-text-field
               v-model="registerForm.telefone"
@@ -79,6 +89,8 @@
               variant="outlined"
               :rules="[rules.required, rules.telefone]"
               required
+              bg-color="white"
+              color="#1f2a44"
             ></v-text-field>
             <v-text-field
               v-model="registerForm.senha"
@@ -90,6 +102,8 @@
               variant="outlined"
               :rules="[rules.required, rules.minPassword]"
               required
+              bg-color="white"
+              color="#1f2a44"
             ></v-text-field>
             <v-text-field
               v-model="registerForm.confirmacao_senha"
@@ -103,6 +117,8 @@
               variant="outlined"
               :rules="[rules.required, rules.passwordMatch]"
               required
+              bg-color="white"
+              color="#1f2a44"
             ></v-text-field>
             <div class="d-flex justify-center">
               <v-btn-toggle
