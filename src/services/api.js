@@ -25,6 +25,14 @@ export const criarResponsavel = async (data) => {
   }
 };
 
+export const getResponsavel = (id) => {
+  return apiClient.get(`/responsaveis/${id}`);
+};
+
+export const updateResponsavel = (id, data) => {
+  return apiClient.patch(`/responsaveis/${id}`, data);
+};
+
 export const criarEscola = async (data) => {
   try {
     const response = await apiClient.post('/escolas', data);

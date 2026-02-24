@@ -14,6 +14,12 @@
         </v-avatar>
       </template>
       <v-list>
+        <v-list-item @click="router.push('/resp/edit-profile')">
+          <template v-slot:prepend>
+            <v-icon icon="mdi-account-edit"></v-icon>
+          </template>
+          <v-list-item-title>Editar Perfil</v-list-item-title>
+        </v-list-item>
         <v-list-item @click="handleLogout">
           <template v-slot:prepend>
             <v-icon icon="mdi-logout"></v-icon>

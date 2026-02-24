@@ -172,7 +172,7 @@
 import { ref, watch } from "vue";
 import { useRouter } from "vue-router";
 import { criarResponsavel, criarEscola, login } from "@/services/api";
-import FeedbackDialog from "@/components/FeedbackDialog.vue";
+import FeedbackDialog from "@/components/resp/dialogs/FeedbackDialog.vue";
 
 const loginFormRef = ref(null);
 const registerFormRef = ref(null);
