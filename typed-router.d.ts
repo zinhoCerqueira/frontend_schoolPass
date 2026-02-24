@@ -24,8 +24,7 @@ declare module 'vue-router/auto-routes' {
     '/LandingPage': RouteRecordInfo<'/LandingPage', '/LandingPage', Record<never, never>, Record<never, never>>,
     '/Login': RouteRecordInfo<'/Login', '/Login', Record<never, never>, Record<never, never>>,
     '/resp/add-student': RouteRecordInfo<'/resp/add-student', '/resp/add-student', Record<never, never>, Record<never, never>>,
-    '/resp/edit-student': RouteRecordInfo<'/resp/edit-student', '/resp/edit-student', Record<never, never>, Record<never, never>, '/resp/edit-student/[id]'>,
-    '/resp/edit-student/[id]': RouteRecordInfo<'/resp/edit-student/[id]', '/resp/edit-student/:id', { id: ParamValue<true> }, { id: ParamValue<false> }>,
+    '/resp/edit-student': RouteRecordInfo<'/resp/edit-student', '/resp/edit-student', Record<never, never>, Record<never, never>>,
     '/resp/home': RouteRecordInfo<'/resp/home', '/resp/home', Record<never, never>, Record<never, never>>,
   }
 
@@ -65,11 +64,7 @@ declare module 'vue-router/auto-routes' {
       views: never
     }
     'src/pages/resp/edit-student.vue': {
-      routes: '/resp/edit-student' | '/resp/edit-student/[id]'
-      views: 'default'
-    }
-    'src/pages/resp/edit-student/[id].vue': {
-      routes: '/resp/edit-student/[id]'
+      routes: '/resp/edit-student'
       views: never
     }
     'src/pages/resp/home.vue': {

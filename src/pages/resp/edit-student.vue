@@ -5,12 +5,12 @@
       <span>Editar Aluno</span>
     </div>
 
-    <div class="text-center description-text mb-4">
+    <div class="text-center description-text mb-3">
       Atualize os dados do aluno abaixo.
     </div>
 
     <v-form ref="studentFormRef" @submit.prevent="handleUpdateStudent">
-      <div class="d-flex justify-center py-2 mb-4">
+      <div class="d-flex justify-center py-2 mb-3">
         <v-avatar size="120" class="avatar-container" @click="showFeatureNotReadyMessage">
           <v-icon size="40">mdi-camera</v-icon>
         </v-avatar>
@@ -65,12 +65,23 @@
         @click="handleUpdateStudent"
         color="#1f2a44"
         block
-        class="mt-4"
+        class="mt-2"
         :loading="loading"
         size="large"
         rounded="lg"
       >
         Salvar Alterações
+      </v-btn>
+      <v-btn
+        @click="showDeleteDialog = true"
+        color="error"
+        variant="outlined"
+        block
+        class="mt-2"
+        size="large"
+        rounded="lg"
+      >
+        Excluir Aluno
       </v-btn>
       <v-btn
         block
@@ -99,14 +110,22 @@
       :type="feedbackType"
       @confirm="handleFeedbackConfirm"
     />
+
+    <ConfirmDialog
+      v-model="showDeleteDialog"
+      title="Excluir Aluno"
+      message="Tem certeza que deseja excluir este aluno? Esta ação não pode ser desfeita."
+      @confirm="handleDeleteStudent"
+    />
   </v-container>
 </template>
 
 <script setup>
 import { ref, watch, computed, onMounted } from 'vue';
 import { useRouter } from 'vue-router';
-import { getAluno, updateAluno } from '@/services/api';
+import { getAluno, updateAluno, deleteAluno } from '@/services/api';
 import FeedbackDialog from '@/components/FeedbackDialog.vue';
+import ConfirmDialog from '@/components/ConfirmDialog.vue';
 
 const router = useRouter();
 const studentFormRef = ref(null);
@@ -115,6 +134,7 @@ const loading = ref(false);
 const studentId = history.state?.studentId;
 
 const showFeedbackDialog = ref(false);
+const showDeleteDialog = ref(false);
 const feedbackMessage = ref('');
 const feedbackType = ref('alert');
 
@@ -228,6 +248,28 @@ const handleUpdateStudent = async () => {
   }
 };
 
+const handleDeleteStudent = async () => {
+  showDeleteDialog.value = false;
+  loading.value = true;
+  try {
+    await deleteAluno(studentId);
+    feedbackMessage.value = 'Aluno excluído com sucesso!';
+    feedbackType.value = 'success';
+    showFeedbackDialog.value = true;
+  } catch (error) {
+    if (!error.response) {
+      feedbackMessage.value = 'Falha de conexão com o servidor.';
+    } else {
+      feedbackMessage.value = error.response?.data?.error || 'Erro ao excluir aluno.';
+    }
+    feedbackType.value = 'error';
+    showFeedbackDialog.value = true;
+    console.error('Erro ao excluir aluno:', error.response?.data || error.message);
+  } finally {
+    loading.value = false;
+  }
+};
+
 const handleFeedbackConfirm = () => {
   showFeedbackDialog.value = false;
   if (feedbackType.value === 'success') {
@@ -258,6 +300,20 @@ onMounted(() => {
   font-family: "Roboto Condensed", sans-serif;
   font-size: clamp(0.9rem, 2vw, 1.1rem);
   line-height: 1.3;
+}
+
+.dialog-title {
+  font-family: "DM Serif Text", serif;
+  font-size: clamp(1.5rem, 3vw, 2rem);
+  line-height: 1.1;
+  color: #1f2a44;
+}
+
+.dialog-description {
+  color: #1f2a44;
+  font-family: "Roboto Condensed", sans-serif;
+  font-size: clamp(1rem, 2.5vw, 1.25rem);
+  line-height: 1.4;
 }
 
 .avatar-container {

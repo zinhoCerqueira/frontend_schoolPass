@@ -59,6 +59,10 @@ export const updateAluno = (id, data) => {
   return apiClient.patch(`/alunos/${id}`, data);
 };
 
+export const deleteAluno = (id) => {
+  return apiClient.delete(`/alunos/${id}`);
+};
+
 export const login = async (email, senha) => {
   try {
     const response = await apiClient.post('/auth/login', { email, senha });

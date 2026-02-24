@@ -14,6 +14,7 @@ declare module 'vue' {
     AppBar: typeof import('./src/components/AppBar.vue')['default']
     AppFooter: typeof import('./src/components/AppFooter.vue')['default']
     AuthForm: typeof import('./src/components/auth/AuthForm.vue')['default']
+    ConfirmDialog: typeof import('./src/components/ConfirmDialog.vue')['default']
     FeedbackDialog: typeof import('./src/components/FeedbackDialog.vue')['default']
     RespAppBar: typeof import('./src/components/resp/RespAppBar.vue')['default']
     RespBottomNav: typeof import('./src/components/resp/RespBottomNav.vue')['default']
