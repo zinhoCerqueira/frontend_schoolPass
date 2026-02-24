@@ -124,8 +124,8 @@
 import { ref, watch, computed, onMounted } from 'vue';
 import { useRouter } from 'vue-router';
 import { getAluno, updateAluno, deleteAluno } from '@/services/api';
-import FeedbackDialog from '@/components/FeedbackDialog.vue';
-import ConfirmDialog from '@/components/ConfirmDialog.vue';
+import FeedbackDialog from '@/components/resp/dialogs/FeedbackDialog.vue';
+import ConfirmDialog from '@/components/resp/dialogs/ConfirmDialog.vue';
 
 const router = useRouter();
 const studentFormRef = ref(null);

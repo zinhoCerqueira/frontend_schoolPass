@@ -106,7 +106,7 @@
 import { ref, watch, computed } from 'vue';
 import { useRouter } from 'vue-router';
 import { criarAluno } from '@/services/api';
-import FeedbackDialog from '@/components/FeedbackDialog.vue';
+import FeedbackDialog from '@/components/resp/dialogs/FeedbackDialog.vue';
 
 const router = useRouter();
 const studentFormRef = ref(null);
