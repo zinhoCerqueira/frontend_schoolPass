@@ -94,7 +94,7 @@
 <script setup>
 import { ref, onMounted } from 'vue';
 import { useRouter } from 'vue-router';
-import { getAlunos, criarAviso } from '@/services/api';
+import { getAlunos, criarAviso, verificarAvisoAtivo } from '@/services/api';
 import FeedbackDialog from '@/components/resp/dialogs/FeedbackDialog.vue';
 
 const router = useRouter();
@@ -181,7 +181,22 @@ const handleFeedbackConfirm = () => {
   }
 };
 
-onMounted(() => {
+const checkAvisoAtivo = async () => {
+  try {
+    const responsavelId = localStorage.getItem('id_token');
+    if (responsavelId) {
+      const response = await verificarAvisoAtivo(responsavelId);
+      if (response.data.aviso_ativo) {
+        router.push('/resp/home');
+      }
+    }
+  } catch (error) {
+    console.error('Erro ao verificar aviso ativo:', error);
+  }
+};
+
+onMounted(async () => {
+  await checkAvisoAtivo();
   fetchAlunos();
 });
 </script>

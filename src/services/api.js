@@ -75,6 +75,10 @@ export const criarAviso = (data) => {
   return apiClient.post('/avisos', data);
 };
 
+export const verificarAvisoAtivo = (responsavelId) => {
+  return apiClient.get(`/responsaveis/${responsavelId}/aviso-ativo`);
+};
+
 export const login = async (email, senha) => {
   try {
     const response = await apiClient.post('/auth/login', { email, senha });
