@@ -45,15 +45,29 @@
       </v-card>
     </div>
 
+    <div class="d-flex justify-end mb-2">
+        <v-btn
+          variant="text"
+          size="small"
+          color="#1f2a44"
+          class="text-none px-0"
+          @click="selectAll"
+        >
+          <v-icon start icon="mdi-check-all"></v-icon>
+          {{ selectedAlunos.length === alunos.length && alunos.length > 0 ? 'Desmarcar todos' : 'Selecionar todos' }}
+        </v-btn>
+      </div>
+
     <v-btn
       block
       color="#1f2a44"
       class="mt-4 text-none"
       rounded="lg"
       size="large"
-      @click="selectAll"
+      @click="handleConfirm"
     >
-      Selecionar todos
+      <v-icon start icon="mdi-car"></v-icon>
+      Confirmar e Avisar a escola
     </v-btn>
     
     <v-btn
@@ -118,6 +132,10 @@ const selectAll = () => {
   } else {
     selectedAlunos.value = alunos.value.map(a => a.id);
   }
+};
+
+const handleConfirm = () => {
+  console.log('Confirmar e avisar escola', selectedAlunos.value);
 };
 
 onMounted(() => {
