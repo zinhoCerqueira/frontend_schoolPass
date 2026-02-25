@@ -71,6 +71,10 @@ export const deleteAluno = (id) => {
   return apiClient.delete(`/alunos/${id}`);
 };
 
+export const criarAviso = (data) => {
+  return apiClient.post('/avisos', data);
+};
+
 export const login = async (email, senha) => {
   try {
     const response = await apiClient.post('/auth/login', { email, senha });

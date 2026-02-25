@@ -58,42 +58,53 @@
         </v-btn>
       </div>
 
-    <v-btn
-      block
-      color="#1f2a44"
-      class="mt-4 text-none"
-      rounded="lg"
-      size="large"
-      @click="handleConfirm"
-    >
-      <v-icon start icon="mdi-car"></v-icon>
-      Confirmar e Avisar a escola
-    </v-btn>
-    
-    <v-btn
+      <v-btn
         block
-        variant="text"
-        @click="router.back()"
         color="#1f2a44"
-        class="mt-2"
+        class="text-none mt-4"
+        rounded="lg"
         size="large"
+        :loading="submitting"
+        @click="handleConfirm"
       >
-        <v-icon start icon="mdi-arrow-left"></v-icon>
-        Voltar
+        <v-icon start icon="mdi-car"></v-icon>
+        Confirmar e Avisar a escola
       </v-btn>
+      <v-btn
+          block
+          variant="text"
+          @click="router.back()"
+          color="#1f2a44"
+          class="mt-2"
+          size="large"
+        >
+          <v-icon start icon="mdi-arrow-left"></v-icon>
+          Voltar
+        </v-btn>
 
   </v-container>
+  <FeedbackDialog
+    v-model="showFeedbackDialog"
+    :message="feedbackMessage"
+    :type="feedbackType"
+    @confirm="handleFeedbackConfirm"
+  />
 </template>
 
 <script setup>
 import { ref, onMounted } from 'vue';
 import { useRouter } from 'vue-router';
-import { getAlunos } from '@/services/api';
+import { getAlunos, criarAviso } from '@/services/api';
+import FeedbackDialog from '@/components/resp/dialogs/FeedbackDialog.vue';
 
 const router = useRouter();
 const alunos = ref([]);
 const selectedAlunos = ref([]);
 const loading = ref(false);
+const submitting = ref(false);
+const showFeedbackDialog = ref(false);
+const feedbackMessage = ref('');
+const feedbackType = ref('alert');
 
 const fetchAlunos = async () => {
   loading.value = true;
@@ -134,8 +145,40 @@ const selectAll = () => {
   }
 };
 
-const handleConfirm = () => {
-  console.log('Confirmar e avisar escola', selectedAlunos.value);
+const handleConfirm = async () => {
+  if (selectedAlunos.value.length === 0) {
+    feedbackMessage.value = 'Selecione pelo menos um aluno para avisar a escola.';
+    feedbackType.value = 'alert';
+    showFeedbackDialog.value = true;
+    return;
+  }
+
+  submitting.value = true;
+  try {
+    const responsavelId = localStorage.getItem('id_token');
+    await criarAviso({
+      aluno_ids: selectedAlunos.value,
+      responsavel_id: responsavelId
+    });
+
+    feedbackMessage.value = 'Aviso enviado com sucesso!';
+    feedbackType.value = 'success';
+    showFeedbackDialog.value = true;
+  } catch (error) {
+    console.error('Erro ao enviar aviso:', error);
+    feedbackMessage.value = 'Erro ao enviar aviso. Tente novamente.';
+    feedbackType.value = 'error';
+    showFeedbackDialog.value = true;
+  } finally {
+    submitting.value = false;
+  }
+};
+
+const handleFeedbackConfirm = () => {
+  showFeedbackDialog.value = false;
+  if (feedbackType.value === 'success') {
+    router.push('/resp/home');
+  }
 };
 
 onMounted(() => {
