@@ -40,6 +40,7 @@
           block
           prepend-icon="mdi-close"
           @click="handleMainAction"
+          :loading="loading"
         >
           Cancelar
         </v-btn>
@@ -113,12 +114,13 @@
 <script setup>
 import { ref, onMounted } from 'vue';
 import { useRouter } from 'vue-router';
-import { getAlunos, verificarAvisoAtivo } from '@/services/api';
+import { getAlunos, verificarAvisoAtivo, cancelarAviso } from '@/services/api';
 
 const router = useRouter();
 const alunos = ref([]);
 const avisoAtivo = ref(false);
 const avisoId = ref(null);
+const loading = ref(false);
 
 const goToEditPage = (id) => {
   router.push({ path: '/resp/edit-student', state: { studentId: id } });
@@ -128,10 +130,18 @@ const handleEditAviso = () => {
   console.log('Editar aviso', avisoId.value);
 };
 
-const handleMainAction = () => {
+const handleMainAction = async () => {
   if (avisoAtivo.value) {
-    // Lógica de cancelamento futura
-    console.log('Cancelar aviso', avisoId.value);
+    loading.value = true;
+    try {
+      await cancelarAviso(avisoId.value);
+      avisoAtivo.value = false;
+      avisoId.value = null;
+    } catch (error) {
+      console.error('Erro ao cancelar aviso:', error);
+    } finally {
+      loading.value = false;
+    }
   } else {
     router.push('/resp/on-my-way');
   }

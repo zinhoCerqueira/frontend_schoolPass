@@ -87,6 +87,17 @@ export const verificarAvisoAtivo = async (responsavelId) => {
   }
 };
 
+export const cancelarAviso = async (avisoId) => {
+  try {
+    const response = await apiClient.patch(`/avisos/${avisoId}`, { status: 'cancelado' });
+    localStorage.removeItem('aviso_id');
+    return response.data;
+  } catch (error) {
+    console.error('Failed to cancel aviso:', error);
+    throw error;
+  }
+};
+
 export const login = async (email, senha) => {
   try {
     const response = await apiClient.post('/auth/login', { email, senha });
