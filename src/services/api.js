@@ -75,8 +75,16 @@ export const criarAviso = (data) => {
   return apiClient.post('/avisos', data);
 };
 
-export const verificarAvisoAtivo = (responsavelId) => {
-  return apiClient.get(`/responsaveis/${responsavelId}/aviso-ativo`);
+export const verificarAvisoAtivo = async (responsavelId) => {
+  try {
+    const response = await apiClient.get(`/responsaveis/${responsavelId}/aviso-ativo`);
+    if (response.data && response.data.aviso_ativo) {
+      localStorage.setItem('aviso_id', response.data.aviso_id);
+    }
+    return response;
+  } catch (error) {
+    throw error;
+  }
 };
 
 export const login = async (email, senha) => {
@@ -88,6 +96,7 @@ export const login = async (email, senha) => {
       localStorage.setItem('nome', response.data.nome);
       localStorage.setItem('sobrenome', response.data.sobrenome);
       localStorage.setItem('id_token', response.data.id);
+      localStorage.setItem('aviso_id', response.data.aviso_id);
     }
     return response.data;
   } catch (error) {
