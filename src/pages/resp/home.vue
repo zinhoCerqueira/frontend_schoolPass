@@ -8,22 +8,52 @@
           width="48"
           height="48"
         >
-          <v-icon icon="mdi-car-side" color="white" size="24"></v-icon>
+          <v-icon :icon="avisoAtivo ? 'mdi-clock-outline' : 'mdi-car-side'" color="white" size="24"></v-icon>
         </v-sheet>
         <div>
-          <h2 class="text-h6 font-weight-bold title-text" style="line-height: 1.2;">Eaí , tá chegando ?</h2>
-          <p class="text-body-2 text-grey-darken-1 mt-1">Avise a escola que você está a caminho.</p>
+          <h2 class="text-h6 font-weight-bold title-text" style="line-height: 1.2;">
+            {{ avisoAtivo ? 'Estamos te aguardando' : 'Eaí , tá chegando ?' }}
+          </h2>
+          <p class="text-body-2 text-grey-darken-1 mt-1">
+            {{ avisoAtivo ? 'A escola já foi avisada.' : 'Avise a escola que você está a caminho.' }}
+          </p>
         </div>
       </div>
 
+      <div v-if="avisoAtivo" class="mt-4">
+        <v-btn
+          variant="tonal"
+          color="#FBC02D"
+          class="mb-2 text-none"
+          rounded="lg"
+          block
+          prepend-icon="mdi-pencil"
+          @click="handleEditAviso"
+        >
+          Editar
+        </v-btn>
+        <v-btn
+          variant="tonal"
+          color="#D32F2F"
+          class="text-none"
+          rounded="lg"
+          block
+          prepend-icon="mdi-close"
+          @click="handleMainAction"
+        >
+          Cancelar
+        </v-btn>
+      </div>
+
       <v-btn
+        v-else
+        variant="tonal"
         block
         color="#1f2a44"
         class="mt-4 text-none"
         rounded="lg"
-        flat
         append-icon="mdi-arrow-right"
-        @click="router.push('/resp/on-my-way')"
+        @click="handleMainAction"
       >
         Estou a caminho
       </v-btn>
@@ -83,13 +113,28 @@
 <script setup>
 import { ref, onMounted } from 'vue';
 import { useRouter } from 'vue-router';
-import { getAlunos } from '@/services/api';
+import { getAlunos, verificarAvisoAtivo } from '@/services/api';
 
 const router = useRouter();
 const alunos = ref([]);
+const avisoAtivo = ref(false);
+const avisoId = ref(null);
 
 const goToEditPage = (id) => {
   router.push({ path: '/resp/edit-student', state: { studentId: id } });
+};
+
+const handleEditAviso = () => {
+  console.log('Editar aviso', avisoId.value);
+};
+
+const handleMainAction = () => {
+  if (avisoAtivo.value) {
+    // Lógica de cancelamento futura
+    console.log('Cancelar aviso', avisoId.value);
+  } else {
+    router.push('/resp/on-my-way');
+  }
 };
 
 const fetchAlunos = async () => {
@@ -111,8 +156,26 @@ const fetchAlunos = async () => {
   }
 };
 
+const checkAviso = async () => {
+  try {
+    const responsavelId = localStorage.getItem('id_token');
+    if (!responsavelId) return;
+    const response = await verificarAvisoAtivo(responsavelId);
+    if (response.data && response.data.aviso_ativo) {
+      avisoAtivo.value = true;
+      avisoId.value = response.data.aviso_id;
+    } else {
+      avisoAtivo.value = false;
+      avisoId.value = null;
+    }
+  } catch (error) {
+    console.error('Erro ao verificar aviso:', error);
+  }
+};
+
 onMounted(() => {
   fetchAlunos();
+  checkAviso();
 });
 </script>
 

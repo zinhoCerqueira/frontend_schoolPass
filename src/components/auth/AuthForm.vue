@@ -43,7 +43,7 @@
               bg-color="white"
               color="#1f2a44"
             ></v-text-field>
-            <v-btn type="submit" color="#1f2a44" block> Entrar </v-btn>
+            <v-btn type="submit" color="#1f2a44" block > Entrar </v-btn>
           </v-form>
         </v-card-text>
       </v-window-item>
