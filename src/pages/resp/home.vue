@@ -108,6 +108,13 @@
     >
       Adicionar Aluno
     </v-btn>
+
+    <ConfirmDialog
+      v-model="showConfirmDialog"
+      title="Cancelar Aviso"
+      message="Tem certeza que deseja cancelar este aviso?"
+      @confirm="executeCancellation"
+    />
   </v-container>
 </template>
 
@@ -115,12 +122,14 @@
 import { ref, onMounted } from 'vue';
 import { useRouter } from 'vue-router';
 import { getAlunos, verificarAvisoAtivo, cancelarAviso } from '@/services/api';
+import ConfirmDialog from '@/components/resp/dialogs/ConfirmDialog.vue';
 
 const router = useRouter();
 const alunos = ref([]);
 const avisoAtivo = ref(false);
 const avisoId = ref(null);
 const loading = ref(false);
+const showConfirmDialog = ref(false);
 
 const goToEditPage = (id) => {
   router.push({ path: '/resp/edit-student', state: { studentId: id } });
@@ -130,20 +139,24 @@ const handleEditAviso = () => {
   router.push('/resp/on-my-way');
 };
 
-const handleMainAction = async () => {
+const handleMainAction = () => {
   if (avisoAtivo.value) {
-    loading.value = true;
-    try {
-      await cancelarAviso(avisoId.value);
-      avisoAtivo.value = false;
-      avisoId.value = null;
-    } catch (error) {
-      console.error('Erro ao cancelar aviso:', error);
-    } finally {
-      loading.value = false;
-    }
+    showConfirmDialog.value = true;
   } else {
     router.push('/resp/on-my-way');
+  }
+};
+
+const executeCancellation = async () => {
+  loading.value = true;
+  try {
+    await cancelarAviso(avisoId.value);
+    avisoAtivo.value = false;
+    avisoId.value = null;
+  } catch (error) {
+    console.error('Erro ao cancelar aviso:', error);
+  } finally {
+    loading.value = false;
   }
 };
 

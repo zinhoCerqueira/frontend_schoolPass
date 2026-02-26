@@ -87,6 +87,20 @@
       {{ mainButtonText }}
     </v-btn>
     <v-btn
+      v-if="isEditing && selectedAlunos.length > 0"
+      block
+      variant="tonal"
+      color="#D32F2F"
+      class="text-none mt-2"
+      rounded="lg"
+      size="large"
+      prepend-icon="mdi-close-circle-outline"
+      :loading="submitting"
+      @click="handleExplicitCancel"
+    >
+      Cancelar Aviso
+    </v-btn>
+    <v-btn
       block
       variant="text"
       @click="router.back()"
@@ -104,6 +118,12 @@
     :type="feedbackType"
     @confirm="handleFeedbackConfirm"
   />
+  <ConfirmDialog
+    v-model="showConfirmDialog"
+    title="Cancelar Aviso"
+    :message="confirmDialogMessage"
+    @confirm="executeCancellation"
+  />
 </template>
 
 <script setup>
@@ -118,6 +138,7 @@ import {
   cancelarAviso,
 } from "@/services/api";
 import FeedbackDialog from "@/components/resp/dialogs/FeedbackDialog.vue";
+import ConfirmDialog from "@/components/resp/dialogs/ConfirmDialog.vue";
 
 const router = useRouter();
 const alunos = ref([]);
@@ -127,6 +148,8 @@ const submitting = ref(false);
 const showFeedbackDialog = ref(false);
 const feedbackMessage = ref("");
 const feedbackType = ref("alert");
+const showConfirmDialog = ref(false);
+const confirmDialogMessage = ref("");
 const isEditing = ref(false);
 const avisoId = ref(null);
 
@@ -184,20 +207,8 @@ const handleConfirm = async () => {
   if (selectedAlunos.value.length === 0) {
     if (isEditing.value) {
       // Se estiver editando e remover todos, cancela o aviso
-      submitting.value = true;
-      try {
-        await cancelarAviso(avisoId.value);
-        feedbackMessage.value = "Aviso cancelado com sucesso!";
-        feedbackType.value = "success";
-        showFeedbackDialog.value = true;
-      } catch (error) {
-        console.error("Erro ao cancelar aviso:", error);
-        feedbackMessage.value = "Erro ao cancelar aviso. Tente novamente.";
-        feedbackType.value = "error";
-        showFeedbackDialog.value = true;
-      } finally {
-        submitting.value = false;
-      }
+      confirmDialogMessage.value = "Ao remover todos os alunos, o aviso será cancelado. Deseja continuar?";
+      showConfirmDialog.value = true;
       return;
     } else {
       feedbackMessage.value =
@@ -226,6 +237,28 @@ const handleConfirm = async () => {
   } catch (error) {
     console.error("Erro ao enviar aviso:", error);
     feedbackMessage.value = "Erro ao enviar aviso. Tente novamente.";
+    feedbackType.value = "error";
+    showFeedbackDialog.value = true;
+  } finally {
+    submitting.value = false;
+  }
+};
+
+const handleExplicitCancel = () => {
+  confirmDialogMessage.value = "Tem certeza que deseja cancelar este aviso?";
+  showConfirmDialog.value = true;
+};
+
+const executeCancellation = async () => {
+  submitting.value = true;
+  try {
+    await cancelarAviso(avisoId.value);
+    feedbackMessage.value = "Aviso cancelado com sucesso!";
+    feedbackType.value = "success";
+    showFeedbackDialog.value = true;
+  } catch (error) {
+    console.error("Erro ao cancelar aviso:", error);
+    feedbackMessage.value = "Erro ao cancelar aviso. Tente novamente.";
     feedbackType.value = "error";
     showFeedbackDialog.value = true;
   } finally {
