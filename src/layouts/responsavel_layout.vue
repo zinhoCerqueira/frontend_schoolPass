@@ -1,9 +1,13 @@
 <template>
-  <RespAppBar />
-  <v-main class="no-padding" style="background-color: #f6f6f8">
-    <router-view />
-  </v-main>
-  <RespBottomNav />
+  <v-layout class="layout-wrapper">
+    <RespAppBar />
+
+    <v-main class="main-content">
+      <router-view />
+    </v-main>
+
+    <RespBottomNav />
+  </v-layout>
 </template>
 
 <script setup>
@@ -12,8 +16,11 @@ import RespBottomNav from "@/components/resp/RespBottomNav.vue";
 </script>
 
 <style scoped>
-.no-padding {
-  padding-top: 0 !important;
-  padding-bottom: 0 !important;
+.layout-wrapper {
+  min-height: 100vh;
+}
+
+.main-content {
+  background-color: #f6f6f8;
 }
 </style>
