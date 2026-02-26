@@ -18,37 +18,61 @@
     </div>
 
     <div v-else>
-      <v-card
-        v-for="aluno in alunos"
-        :key="aluno.id"
-        class="mb-3 pa-3"
-        flat
-        rounded="lg"
-        style="border: 1px solid #d2d2d8"
-        @click="toggleSelection(aluno.id)"
-      >
-        <div class="d-flex align-center">
-          <v-avatar size="48" class="mr-4">
-            <v-img :src="aluno.avatar" :alt="aluno.nome"></v-img>
-          </v-avatar>
-
-          <div class="flex-grow-1">
-            <div class="font-weight-bold text-grey-darken-4">
-              {{ aluno.nome }}
-            </div>
-            <div class="text-body-2 text-grey-darken-1">{{ aluno.info }}</div>
-          </div>
-
-          <v-checkbox
-            v-model="selectedAlunos"
-            :value="aluno.id"
-            color="#1f2a44"
-            hide-details
-            density="compact"
-            @click.stop
-          ></v-checkbox>
+      <div v-if="selectedList.length > 0" class="mb-6">
+        <div class="text-subtitle-2 text-grey-darken-1 mb-2 font-weight-bold">
+          Vou buscar ({{ selectedList.length }})
         </div>
-      </v-card>
+        <v-card
+          v-for="aluno in selectedList"
+          :key="aluno.id"
+          class="mb-3 pa-3"
+          flat
+          rounded="lg"
+          style="border: 2px solid #1f2a44; background-color: #f4f6f8"
+          @click="toggleSelection(aluno.id)"
+        >
+          <div class="d-flex align-center">
+            <v-avatar size="48" class="mr-4">
+              <v-img :src="aluno.avatar" :alt="aluno.nome"></v-img>
+            </v-avatar>
+            <div class="flex-grow-1">
+              <div class="font-weight-bold text-grey-darken-4">
+                {{ aluno.nome }}
+              </div>
+              <div class="text-body-2 text-grey-darken-1">{{ aluno.info }}</div>
+            </div>
+            <v-icon color="#1f2a44" icon="mdi-check-circle"></v-icon>
+          </div>
+        </v-card>
+      </div>
+
+      <div v-if="unselectedList.length > 0">
+        <div class="text-subtitle-2 text-grey-darken-1 mb-2 font-weight-bold">
+          Não vou buscar ({{ unselectedList.length }})
+        </div>
+        <v-card
+          v-for="aluno in unselectedList"
+          :key="aluno.id"
+          class="mb-3 pa-3"
+          flat
+          rounded="lg"
+          style="border: 1px solid #d2d2d8; opacity: 0.7"
+          @click="toggleSelection(aluno.id)"
+        >
+          <div class="d-flex align-center">
+            <v-avatar size="48" class="mr-4" style="filter: grayscale(100%)">
+              <v-img :src="aluno.avatar" :alt="aluno.nome"></v-img>
+            </v-avatar>
+            <div class="flex-grow-1">
+              <div class="font-weight-bold text-grey-darken-4">
+                {{ aluno.nome }}
+              </div>
+              <div class="text-body-2 text-grey-darken-1">{{ aluno.info }}</div>
+            </div>
+            <v-icon color="grey" icon="mdi-plus-circle-outline"></v-icon>
+          </div>
+        </v-card>
+      </div>
     </div>
 
     <div class="d-flex justify-end mb-2">
@@ -153,6 +177,14 @@ const confirmDialogMessage = ref("");
 const isEditing = ref(false);
 const avisoId = ref(null);
 
+const selectedList = computed(() =>
+  alunos.value.filter((a) => selectedAlunos.value.includes(a.id))
+);
+
+const unselectedList = computed(() =>
+  alunos.value.filter((a) => !selectedAlunos.value.includes(a.id))
+);
+
 const mainButtonText = computed(() => {
   if (isEditing.value) {
     return selectedAlunos.value.length === 0
@@ -206,7 +238,6 @@ const selectAll = () => {
 const handleConfirm = async () => {
   if (selectedAlunos.value.length === 0) {
     if (isEditing.value) {
-      // Se estiver editando e remover todos, cancela o aviso
       confirmDialogMessage.value = "Ao remover todos os alunos, o aviso será cancelado. Deseja continuar?";
       showConfirmDialog.value = true;
       return;
@@ -282,7 +313,6 @@ const checkAvisoAtivo = async () => {
         isEditing.value = true;
         avisoId.value = response.data.aviso_id;
 
-        // Buscar detalhes do aviso para preencher a seleção
         const avisoResponse = await getAviso(avisoId.value);
         if (avisoResponse.data && avisoResponse.data.aluno_ids) {
           selectedAlunos.value = avisoResponse.data.aluno_ids;
