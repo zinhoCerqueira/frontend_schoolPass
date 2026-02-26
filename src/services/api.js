@@ -75,6 +75,14 @@ export const criarAviso = (data) => {
   return apiClient.post('/avisos', data);
 };
 
+export const getAviso = (id) => {
+  return apiClient.get(`/avisos/${id}`);
+};
+
+export const atualizarAviso = (id, data) => {
+  return apiClient.patch(`/avisos/${id}`, data);
+};
+
 export const verificarAvisoAtivo = async (responsavelId) => {
   try {
     const response = await apiClient.get(`/responsaveis/${responsavelId}/aviso-ativo`);

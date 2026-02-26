@@ -2,7 +2,7 @@
   <v-container class="pa-4" fluid>
     <div class="text-center py-2 title-text d-flex align-center justify-center mb-4">
       <v-icon start icon="mdi-car-side" size="28" color="#1f2a44"></v-icon>
-      <span class="text-h5 font-weight-bold" style="color: #1f2a44;">Estou a Caminho</span>
+      <span class="text-h5 font-weight-bold" style="color: #1f2a44;">{{ isEditing ? 'Editar Aviso' : 'Estou a Caminho' }}</span>
     </div>
 
     <div class="text-center description-text mb-6">
@@ -60,15 +60,16 @@
 
       <v-btn
         block
-        color="#1f2a44"
+        variant="flat"
+        :color="isEditing && selectedAlunos.length === 0 ? '#D32F2F' : '#1f2a44'"
         class="text-none mt-4"
         rounded="lg"
         size="large"
         :loading="submitting"
         @click="handleConfirm"
       >
-        <v-icon start icon="mdi-car"></v-icon>
-        Confirmar e Avisar a escola
+        <v-icon start :icon="isEditing && selectedAlunos.length === 0 ? 'mdi-close' : 'mdi-car'"></v-icon>
+        {{ mainButtonText }}
       </v-btn>
       <v-btn
           block
@@ -92,9 +93,9 @@
 </template>
 
 <script setup>
-import { ref, onMounted } from 'vue';
+import { ref, onMounted, computed } from 'vue';
 import { useRouter } from 'vue-router';
-import { getAlunos, criarAviso, verificarAvisoAtivo } from '@/services/api';
+import { getAlunos, criarAviso, verificarAvisoAtivo, getAviso, atualizarAviso, cancelarAviso } from '@/services/api';
 import FeedbackDialog from '@/components/resp/dialogs/FeedbackDialog.vue';
 
 const router = useRouter();
@@ -105,6 +106,15 @@ const submitting = ref(false);
 const showFeedbackDialog = ref(false);
 const feedbackMessage = ref('');
 const feedbackType = ref('alert');
+const isEditing = ref(false);
+const avisoId = ref(null);
+
+const mainButtonText = computed(() => {
+  if (isEditing.value) {
+    return selectedAlunos.value.length === 0 ? 'Cancelar Aviso' : 'Salvar Alterações';
+  }
+  return 'Confirmar e Avisar a escola';
+});
 
 const fetchAlunos = async () => {
   loading.value = true;
@@ -147,21 +157,44 @@ const selectAll = () => {
 
 const handleConfirm = async () => {
   if (selectedAlunos.value.length === 0) {
-    feedbackMessage.value = 'Selecione pelo menos um aluno para avisar a escola.';
-    feedbackType.value = 'alert';
-    showFeedbackDialog.value = true;
-    return;
+    if (isEditing.value) {
+      // Se estiver editando e remover todos, cancela o aviso
+      submitting.value = true;
+      try {
+        await cancelarAviso(avisoId.value);
+        feedbackMessage.value = 'Aviso cancelado com sucesso!';
+        feedbackType.value = 'success';
+        showFeedbackDialog.value = true;
+      } catch (error) {
+        console.error('Erro ao cancelar aviso:', error);
+        feedbackMessage.value = 'Erro ao cancelar aviso. Tente novamente.';
+        feedbackType.value = 'error';
+        showFeedbackDialog.value = true;
+      } finally {
+        submitting.value = false;
+      }
+      return;
+    } else {
+      feedbackMessage.value = 'Selecione pelo menos um aluno para avisar a escola.';
+      feedbackType.value = 'alert';
+      showFeedbackDialog.value = true;
+      return;
+    }
   }
 
   submitting.value = true;
   try {
-    const responsavelId = localStorage.getItem('id_token');
-    await criarAviso({
-      aluno_ids: selectedAlunos.value,
-      responsavel_id: responsavelId
-    });
-
-    feedbackMessage.value = 'Aviso enviado com sucesso!';
+    if (isEditing.value) {
+      await atualizarAviso(avisoId.value, { aluno_ids: selectedAlunos.value });
+      feedbackMessage.value = 'Aviso atualizado com sucesso!';
+    } else {
+      const responsavelId = localStorage.getItem('id_token');
+      await criarAviso({
+        aluno_ids: selectedAlunos.value,
+        responsavel_id: responsavelId
+      });
+      feedbackMessage.value = 'Aviso enviado com sucesso!';
+    }
     feedbackType.value = 'success';
     showFeedbackDialog.value = true;
   } catch (error) {
@@ -187,7 +220,14 @@ const checkAvisoAtivo = async () => {
     if (responsavelId) {
       const response = await verificarAvisoAtivo(responsavelId);
       if (response.data.aviso_ativo) {
-        router.push('/resp/home');
+        isEditing.value = true;
+        avisoId.value = response.data.aviso_id;
+        
+        // Buscar detalhes do aviso para preencher a seleção
+        const avisoResponse = await getAviso(avisoId.value);
+        if (avisoResponse.data && avisoResponse.data.aluno_ids) {
+          selectedAlunos.value = avisoResponse.data.aluno_ids;
+        }
       }
     }
   } catch (error) {

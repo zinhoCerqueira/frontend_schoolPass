@@ -48,7 +48,7 @@
 
       <v-btn
         v-else
-        variant="tonal"
+        :variant="avisoAtivo ? 'tonal' : 'flat'"
         block
         color="#1f2a44"
         class="mt-4 text-none"
@@ -127,7 +127,7 @@ const goToEditPage = (id) => {
 };
 
 const handleEditAviso = () => {
-  console.log('Editar aviso', avisoId.value);
+  router.push('/resp/on-my-way');
 };
 
 const handleMainAction = async () => {
