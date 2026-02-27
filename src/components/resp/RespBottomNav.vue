@@ -8,9 +8,9 @@
       <span>Início</span>
     </v-btn>
 
-    <v-btn value="filhos" >
-      <v-icon>mdi-account-school-outline</v-icon>
-      <span>Filhos</span>
+    <v-btn value="avisos" to="/resp/avisos">
+      <v-icon>mdi-bell-outline</v-icon>
+      <span>Avisos</span>
     </v-btn>
 
     <v-btn value="perfil">
