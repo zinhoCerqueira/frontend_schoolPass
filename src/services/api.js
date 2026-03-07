@@ -75,6 +75,14 @@ export const criarAviso = (data) => {
   return apiClient.post('/avisos', data);
 };
 
+export const getAvisos = (responsavelId, page = 1, limit = 10) => {
+  return apiClient.get('/avisos', { params: {
+    responsavel_id: responsavelId,
+    page,
+    limit
+  }});
+};
+
 export const getAviso = (id) => {
   return apiClient.get(`/avisos/${id}`);
 };
